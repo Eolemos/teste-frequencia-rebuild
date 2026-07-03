@@ -118,7 +118,7 @@ function montarPayloadLead(email) {
       lerLocalStorage("testeFrequenciaDia") ||
       "",
     month:
-      pegarValorPorPistas(["mes", "mÃªs", "month"]) ||
+      pegarValorPorPistas(["mes", "mês", "month"]) ||
       lerLocalStorage("testeFrequenciaMes") ||
       "",
     year:
@@ -207,5 +207,7 @@ document.addEventListener("click", async function (event) {
   await enviarLeadAntesDoCheckout(email);
   redirecionarCheckout();
 }, true);
+
+
 
 
