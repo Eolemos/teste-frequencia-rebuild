@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bônus secreto</title>
+  <link rel="stylesheet" href="css/member-area.css" />
+</head>
+<body>
+  <main>
+    <h1>Bônus secreto</h1>
+    <p class="center">Este conteúdo libera depois da conclusão dos 7 dias.</p>
+
+    <div id="content"></div>
+  </main>
+
+  <script src="js/member-api.js"></script>
+  <script>
+    const token = MemberApi.getToken();
+    const content = document.querySelector("#content");
+
+    async function boot() {
+      if (!token) {
+        MemberApi.showError(content, new Error("Token nao encontrado."));
+        return;
+      }
+
+      MemberApi.setLoading(content, "Verificando liberacao...");
+
+      try {
+        const data = await MemberApi.bonus(token);
+
+        if (data.locked) {
+          content.innerHTML = `
+            <div class="panel center">
+              <span class="badge">Bloqueado por enquanto</span>
+              <p>${data.message || "Conclua os 7 dias para liberar."}</p>
+              <p class="muted">${(data.completedDays || []).length}/7 dias concluidos.</p>
+            </div>
+            <div class="actions">
+              <a class="button" href="${MemberApi.pageUrl("frequencia", token)}">Continuar jornada</a>
+              <a class="button secondary" href="${MemberApi.pageUrl("progresso", token)}">Ver progresso</a>
+            </div>
+          `;
+          return;
+        }
+
+        content.innerHTML = `
+          <div class="panel center">
+            <span class="badge">Liberado</span>
+            <h2>${data.title || "Bonus secreto liberado"}</h2>
+            <p>${data.message || "Voce concluiu os 7 dias e desbloqueou este acesso extra."}</p>
+            ${data.unlockedAt ? `<p class="muted">Liberado em ${MemberApi.formatDate(data.unlockedAt)}</p>` : ""}
+          </div>
+          <div class="actions">
+            <a class="button" href="${MemberApi.pageUrl("membros", token)}">Voltar para membros</a>
+          </div>
+        `;
+      } catch (error) {
+        MemberApi.showError(content, error);
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>

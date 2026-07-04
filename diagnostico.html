@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diagnóstico bônus</title>
+  <link rel="stylesheet" href="css/member-area.css" />
+</head>
+<body>
+  <main>
+    <h1>Diagnóstico bônus</h1>
+    <p class="center">Responda para personalizar sua orientação de frequência.</p>
+
+    <div id="content"></div>
+  </main>
+
+  <script src="js/member-api.js"></script>
+  <script>
+    const token = MemberApi.getToken();
+    const content = document.querySelector("#content");
+
+    function renderForm(data) {
+      const previous = data.diagnostic?.answers || {};
+      const questions = data.questions || [];
+
+      content.innerHTML = `
+        <form id="diagnosticForm">
+          <div class="panel">
+            ${questions.map((question) => `
+              <label>
+                ${question.label}
+                <select name="${question.id}" required>
+                  ${question.options.map((option) => `
+                    <option value="${option.value}" ${previous[question.id] === option.value ? "selected" : ""}>${option.label}</option>
+                  `).join("")}
+                </select>
+              </label>
+            `).join("")}
+          </div>
+          <div class="actions">
+            <button type="submit">Salvar diagnóstico</button>
+          </div>
+        </form>
+      `;
+
+      document.querySelector("#diagnosticForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = event.currentTarget.querySelector("button");
+        button.disabled = true;
+        button.textContent = "Salvando...";
+
+        try {
+          const payload = Object.fromEntries(new FormData(event.currentTarget).entries());
+          const response = await MemberApi.saveDiagnostic(token, payload);
+          window.location.href = response.redirectUrl || MemberApi.pageUrl("frequencia", token);
+        } catch (error) {
+          MemberApi.showError(content, error);
+        }
+      });
+    }
+
+    async function boot() {
+      if (!token) {
+        MemberApi.showError(content, new Error("Token nao encontrado."));
+        return;
+      }
+
+      MemberApi.setLoading(content, "Carregando perguntas...");
+
+      try {
+        const data = await MemberApi.diagnostic(token);
+        renderForm(data);
+      } catch (error) {
+        MemberApi.showError(content, error);
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>

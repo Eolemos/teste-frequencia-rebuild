@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sessão de frequência</title>
+  <link rel="stylesheet" href="css/member-area.css" />
+</head>
+<body>
+  <main>
+    <h1>Sessão de frequência</h1>
+    <p class="center">Sessão de frequência — 60 minutos</p>
+
+    <div id="content"></div>
+  </main>
+
+  <script src="js/member-api.js"></script>
+  <script>
+    const token = MemberApi.getToken();
+    const content = document.querySelector("#content");
+    let heartbeatTimer = null;
+    let audio = null;
+
+    function stopHeartbeat() {
+      if (heartbeatTimer) window.clearInterval(heartbeatTimer);
+      heartbeatTimer = null;
+    }
+
+    function progressPercent(state) {
+      const required = Number(state.requiredListenSecondsPerDay || 3600);
+      const listened = Number(state.listenSeconds || 0);
+      return Math.min(100, Math.round((listened / required) * 100));
+    }
+
+    function renderState(state) {
+      const completedDays = state.completedDays || [];
+      const percent = progressPercent(state);
+      const required = Number(state.requiredListenSecondsPerDay || 3600);
+      const listened = Number(state.listenSeconds || 0);
+      const currentDay = state.currentDay || Math.min(completedDays.length + 1, 7);
+      const lockedMessage = state.nextDayUnlockAt
+        ? `<p class="muted">Proximo dia libera em ${MemberApi.formatDate(state.nextDayUnlockAt)}.</p>`
+        : "";
+
+      document.querySelector("#progressInfo").innerHTML = `
+        <p><strong>Dia atual:</strong> ${currentDay} de 7</p>
+        <div class="progressbar"><span style="width:${percent}%"></span></div>
+        <p class="muted">${MemberApi.secondsLabel(listened)} contabilizados de ${MemberApi.secondsLabel(required)}.</p>
+        <p class="muted">${completedDays.length}/7 dias concluidos.</p>
+        ${lockedMessage}
+      `;
+
+      if (state.bonusUnlocked) {
+        document.querySelector("#bonusLink").hidden = false;
+      }
+    }
+
+    async function sendHeartbeat() {
+      if (!audio || audio.paused) return;
+
+      try {
+        const response = await MemberApi.heartbeat(token, 10);
+        const state = response.progress || response;
+        renderState(state);
+      } catch (error) {
+        stopHeartbeat();
+        MemberApi.showError(document.querySelector("#message"), error);
+      }
+    }
+
+    function renderPlayer(data) {
+      content.innerHTML = `
+        <div class="panel center">
+          <span class="badge">Sessão de frequência — 60 minutos</span>
+          <p>Oi, <strong>${data.name || "Ana Clara"}</strong>. Coloque o áudio para tocar e mantenha a sessão ativa.</p>
+          <audio id="frequencyAudio" loop preload="auto"></audio>
+          <div class="actions">
+            <button id="playButton">Iniciar sessão</button>
+            <button id="pauseButton" class="secondary" disabled>Pausar</button>
+          </div>
+        </div>
+
+        <div id="progressInfo" class="panel"></div>
+        <div id="message"></div>
+
+        <div class="actions">
+          <a class="button secondary" href="${MemberApi.pageUrl("progresso", token)}">Ver progresso completo</a>
+          <a id="bonusLink" class="button secondary" href="${MemberApi.pageUrl("bonus", token)}" hidden>Abrir bônus secreto</a>
+        </div>
+      `;
+
+      audio = document.querySelector("#frequencyAudio");
+      audio.src = data.audioUrl;
+      renderState(data);
+
+      document.querySelector("#playButton").addEventListener("click", async () => {
+        await audio.play();
+        document.querySelector("#playButton").disabled = true;
+        document.querySelector("#pauseButton").disabled = false;
+        await sendHeartbeat();
+        stopHeartbeat();
+        heartbeatTimer = window.setInterval(sendHeartbeat, 10000);
+      });
+
+      document.querySelector("#pauseButton").addEventListener("click", () => {
+        audio.pause();
+        stopHeartbeat();
+        document.querySelector("#playButton").disabled = false;
+        document.querySelector("#pauseButton").disabled = true;
+      });
+    }
+
+    async function boot() {
+      if (!token) {
+        MemberApi.showError(content, new Error("Token nao encontrado."));
+        return;
+      }
+
+      MemberApi.setLoading(content, "Abrindo sua sessao...");
+
+      try {
+        const data = await MemberApi.frequency(token);
+        renderPlayer(data);
+      } catch (error) {
+        MemberApi.showError(content, error);
+      }
+    }
+
+    window.addEventListener("beforeunload", stopHeartbeat);
+    boot();
+  </script>
+</body>
+</html>

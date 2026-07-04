@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Acesso liberado</title>
+  <link rel="stylesheet" href="css/member-area.css" />
+</head>
+<body>
+  <main>
+    <h1>Compra confirmada</h1>
+    <p class="center">Complete seus dados para liberar seus materiais personalizados.</p>
+
+    <div id="status"></div>
+
+    <form id="accessForm" hidden>
+      <div class="panel">
+        <label>
+          Nome completo
+          <input name="name" autocomplete="name" required />
+        </label>
+
+        <label>
+          E-mail
+          <input name="email" type="email" autocomplete="email" required />
+        </label>
+
+        <div class="grid">
+          <label>
+            Dia de nascimento
+            <input name="birthDay" inputmode="numeric" min="1" max="31" required />
+          </label>
+          <label>
+            Mes de nascimento
+            <input name="birthMonth" inputmode="numeric" min="1" max="12" required />
+          </label>
+        </div>
+
+        <label>
+          Ano de nascimento
+          <input name="birthYear" inputmode="numeric" min="1900" max="2026" required />
+        </label>
+
+        <label>
+          Principal area que deseja melhorar
+          <select name="improvementArea" required>
+            <option value="prosperidade">Prosperidade</option>
+            <option value="amor">Amor</option>
+            <option value="proteção">Protecao</option>
+            <option value="clareza">Clareza</option>
+            <option value="cura emocional">Cura emocional</option>
+            <option value="proposito">Proposito</option>
+          </select>
+        </label>
+
+        <label>
+          Principal desafio atual
+          <textarea name="currentChallenge" required>Tenho sentido bloqueios e quero clareza para destravar minha energia.</textarea>
+        </label>
+
+        <label>
+          Objetivo espiritual/emocional
+          <textarea name="spiritualGoal" required>Quero alinhar minha frequencia e receber direcionamento para os proximos dias.</textarea>
+        </label>
+
+        <label class="check">
+          <input name="emailPermission" type="checkbox" checked />
+          Permito receber meus materiais por e-mail.
+        </label>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Liberar meus materiais</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="js/member-api.js"></script>
+  <script>
+    const token = MemberApi.getToken();
+    const statusEl = document.querySelector("#status");
+    const form = document.querySelector("#accessForm");
+
+    async function boot() {
+      if (!token) {
+        MemberApi.showError(statusEl, new Error("Token nao encontrado. Abra o link que chegou no seu e-mail."));
+        return;
+      }
+
+      MemberApi.setLoading(statusEl, "Validando seu acesso...");
+
+      try {
+        const data = await MemberApi.access(token);
+        const customer = data.customer || {};
+
+        form.elements.name.value = customer.name || "";
+        form.elements.email.value = customer.email || "";
+
+        statusEl.innerHTML = `
+          <div class="panel center">
+            <span class="badge">Acesso confirmado</span>
+            <p>Oi, <strong>${customer.name || "Ana Clara"}</strong>.</p>
+            <p class="muted">Seu token foi validado. Agora falta completar as informacoes para preparar seus PDFs.</p>
+          </div>
+        `;
+        form.hidden = false;
+      } catch (error) {
+        MemberApi.showError(statusEl, error);
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = form.querySelector("button");
+      button.disabled = true;
+      button.textContent = "Preparando...";
+
+      const payload = Object.fromEntries(new FormData(form).entries());
+      payload.emailPermission = form.elements.emailPermission.checked;
+
+      try {
+        const response = await MemberApi.submitAccess(token, payload);
+        window.location.href = response.deliveryUrl || MemberApi.pageUrl("entrega", token);
+      } catch (error) {
+        MemberApi.showError(statusEl, error);
+        button.disabled = false;
+        button.textContent = "Liberar meus materiais";
+      }
+    });
+
+    boot();
+  </script>
+</body>
+</html>

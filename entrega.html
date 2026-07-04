@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Materiais prontos</title>
+  <link rel="stylesheet" href="css/member-area.css" />
+</head>
+<body>
+  <main>
+    <h1>Seus materiais estão prontos</h1>
+    <p class="center">Baixe seus PDFs personalizados e acesse sua jornada de frequência.</p>
+
+    <div id="content"></div>
+  </main>
+
+  <script src="js/member-api.js"></script>
+  <script>
+    const token = MemberApi.getToken();
+    const content = document.querySelector("#content");
+
+    function materialLinks(data) {
+      const downloadUrls = data.downloadUrls || {};
+      return `
+        <div class="panel center">
+          <span class="badge">Entrega liberada</span>
+          <p>Oi, <strong>${data.name || "Ana Clara"}</strong>.</p>
+          <p class="muted">Seus materiais foram preparados com sucesso.</p>
+        </div>
+        <div class="actions">
+          <a class="button" href="${downloadUrls.mapa || "#"}" ${downloadUrls.mapa ? "" : "aria-disabled=\"true\""}>Baixar Mapa Completo</a>
+          <a class="button" href="${downloadUrls.leitura || "#"}" ${downloadUrls.leitura ? "" : "aria-disabled=\"true\""}>Baixar Leitura Personalizada</a>
+          <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar plataforma bônus vitalícia</a>
+        </div>
+      `;
+    }
+
+    async function boot() {
+      if (!token) {
+        MemberApi.showError(content, new Error("Token nao encontrado."));
+        return;
+      }
+
+      MemberApi.setLoading(content, "Buscando seus materiais...");
+
+      try {
+        const data = await MemberApi.delivery(token);
+        content.innerHTML = materialLinks(data);
+      } catch (error) {
+        content.innerHTML = `
+          <div class="panel error">
+            <strong>Materiais ainda nao encontrados.</strong>
+            <p>${error.message}</p>
+          </div>
+          <div class="actions">
+            <button id="generateButton">Gerar meus materiais agora</button>
+          </div>
+        `;
+
+        document.querySelector("#generateButton").addEventListener("click", async () => {
+          const button = document.querySelector("#generateButton");
+          button.disabled = true;
+          button.textContent = "Gerando...";
+          try {
+            await MemberApi.generateDelivery(token);
+            const data = await MemberApi.delivery(token);
+            content.innerHTML = materialLinks(data);
+          } catch (generationError) {
+            MemberApi.showError(content, generationError);
+          }
+        });
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>

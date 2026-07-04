@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Progresso da jornada</title>
+  <link rel="stylesheet" href="css/member-area.css" />
+</head>
+<body>
+  <main>
+    <h1>Progresso da jornada</h1>
+    <p class="center">Acompanhe os 7 dias da sua sessão de frequência.</p>
+
+    <div id="content"></div>
+  </main>
+
+  <script src="js/member-api.js"></script>
+  <script>
+    const token = MemberApi.getToken();
+    const content = document.querySelector("#content");
+
+    function dayCard(day, requiredSeconds) {
+      const listened = Number(day.listenSeconds || 0);
+      const required = Number(day.requiredSeconds || requiredSeconds || 3600);
+      const percent = Math.min(100, Math.round((listened / required) * 100));
+      const status = day.completedAt ? "Concluido" : "Em andamento";
+
+      return `
+        <div class="panel">
+          <h2>Dia ${day.day} - ${status}</h2>
+          <div class="progressbar"><span style="width:${percent}%"></span></div>
+          <p class="muted">${MemberApi.secondsLabel(listened)} de ${MemberApi.secondsLabel(required)}</p>
+          ${day.unlockedAt ? `<p class="muted">Liberado em ${MemberApi.formatDate(day.unlockedAt)}</p>` : ""}
+          ${day.completedAt ? `<p class="muted">Concluido em ${MemberApi.formatDate(day.completedAt)}</p>` : ""}
+        </div>
+      `;
+    }
+
+    async function boot() {
+      if (!token) {
+        MemberApi.showError(content, new Error("Token nao encontrado."));
+        return;
+      }
+
+      MemberApi.setLoading(content, "Carregando progresso...");
+
+      try {
+        const data = await MemberApi.progress(token);
+        const progress = data.progress || {};
+        const days = progress.days || [];
+        const completed = progress.completedDays || [];
+
+        content.innerHTML = `
+          <div class="panel center">
+            <span class="badge">${completed.length}/7 dias concluidos</span>
+            <p class="muted">O proximo dia libera automaticamente depois do intervalo configurado no servidor.</p>
+          </div>
+
+          ${days.map((day) => dayCard(day, progress.requiredListenSecondsPerDay)).join("")}
+
+          <div class="actions">
+            <a class="button" href="${MemberApi.pageUrl("frequencia", token)}">Continuar frequência</a>
+            <a class="button secondary" href="${MemberApi.pageUrl("bonus", token)}">Ver bônus secreto</a>
+          </div>
+        `;
+      } catch (error) {
+        MemberApi.showError(content, error);
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>
