@@ -1658,7 +1658,7 @@
     <div class="vsl-frame">
       <div class="vsl-card">
         <div class="vsl-video-wrap">
-          <!-- VSL local: substitua o arquivo em assets/video/vsl.mp4 mantendo este caminho. -->
+          <!-- Player MP4 legado desativado. BSL atual usa áudio + imagens. -->
           <video id="vslVideo" class="vsl-video" controls playsinline preload="none">
             <!-- VSL MP4 desativada: BSL atual usa audio + imagens -->
           </video>
@@ -1685,7 +1685,7 @@ const decades = [1910,1920,1930,1940,1950,1960,1970,1980,1990,2000,2010];
 // ÁUDIO
 const AUDIO_SRC = "captions/h_40_s.mp3";
 
-// VSL local: coloque o arquivo em assets/video/vsl.mp4.
+// Player MP4 legado desativado.
 const VSL_SRC = "";
 
 /* =========================
@@ -30769,60 +30769,11 @@ function previewCheckoutButton(){
 
 window.previewCheckoutButton = previewCheckoutButton;
 
-function previewVslDebugScene(params = new URLSearchParams(window.location.search)){
-  if (!VSL_DEBUG_ENABLED || !params.has("debugVslTime")) return false;
-
-  localStorage.setItem("freq_gender", localStorage.getItem("freq_gender") || "M");
-  localStorage.setItem("freq_month", localStorage.getItem("freq_month") || "7");
-  localStorage.setItem("freq_day", localStorage.getItem("freq_day") || "24");
-  localStorage.setItem("freq_year", localStorage.getItem("freq_year") || "1991");
-  localStorage.setItem("freq_civil", localStorage.getItem("freq_civil") || "Solteiro(a)");
-  localStorage.setItem("freq_challenge", localStorage.getItem("freq_challenge") || "Finanças");
-  localStorage.setItem("freq_name", localStorage.getItem("freq_name") || "Ana Clara");
-
-  const phase = params.get("debugVslPhase") === "p2" ? "p2" : "p1";
-  const p2Key = params.get("debugVslP2") || "dinheiro";
-  const time = Number(params.get("debugVslTime") || 0);
-  const safeTime = Number.isFinite(time) && time >= 0 ? time : 0;
-  const audio = document.getElementById("fxAudio");
-
-  goStep(11);
-  fxCloseEmailPopup();
-
-  if (audio){
-    audio.autoplay = false;
-    audio.pause();
-    if (phase === "p2"){
-      fxActiveP2Key = p2Key;
-      fxActiveCaptions = P2_CAPTION_SETS[fxActiveP2Key] || P2_CAPTION_SETS[DEFAULT_P2_VARIANT_KEY] || [];
-      fxPhase = "p2";
-      fxActiveTimeline = fxBuildPart2Timeline(fxActiveP2Key, fxActiveCaptions);
-      fxSetAudioSources(audio, `captions/p2_${fxActiveP2Key}.mp3`, `captions/p2_${fxActiveP2Key}.vtt`);
-    } else {
-      fxApplyVariant(audio);
-    }
-    try { audio.currentTime = safeTime; } catch (error) {}
-  } else if (phase === "p2"){
-    fxPhase = "p2";
-    fxActiveP2Key = p2Key;
-    fxActiveTimeline = fxBuildPart2Timeline(fxActiveP2Key, P2_CAPTION_SETS[fxActiveP2Key] || []);
-  } else {
-    fxPhase = "p1";
-    fxActiveTimeline = fxBuildPart1Timeline();
-  }
-
-  fxCurrentSceneKey = "";
-  fxSetIntroTitle(safeTime);
-  fxApplySceneByTime(safeTime);
-  fxRenderFallbackCaption(safeTime);
-  return true;
-}
-
-window.previewVslDebugScene = previewVslDebugScene;
 
 /* =========================
    INIT
 ========================= */
+
 document.addEventListener("DOMContentLoaded", () => {
   const bootAudio = document.getElementById("fxAudio");
   if (bootAudio){
@@ -30833,7 +30784,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const params = new URLSearchParams(window.location.search);
-  if (previewVslDebugScene(params)) return;
 
   if (params.get("preview") === "checkout-button"){
     setTimeout(previewCheckoutButton, 80);
@@ -30960,6 +30910,13 @@ function bindVttToFxText(audioEl){
 <script src="js/checkout-override.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
