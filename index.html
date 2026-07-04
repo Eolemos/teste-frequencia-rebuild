@@ -754,6 +754,24 @@
   transition: width .1s linear;
 }
 
+.fx-debug{
+  position:fixed;
+  left:12px;
+  bottom:12px;
+  z-index:1200;
+  max-width:min(360px, calc(100vw - 24px));
+  background:rgba(0,0,0,.84);
+  border:1px solid rgba(217,177,44,.7);
+  border-radius:10px;
+  color:#fff;
+  font: 12px/1.35 Arial, Helvetica, sans-serif;
+  padding:10px 12px;
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+  pointer-events:none;
+}
+
+.fx-debug strong{ color:#ffd966; }
+
 /* botão final */
 .fx-final-btn{
   width: min(420px, 100%);
@@ -29669,6 +29687,129 @@ const FX_PART2 = [
   "assets/imgs/img_realinhar.png"
 ];
 
+const FX_PART2_GENERIC = FX_PART2.filter(src => !src.includes("img_depoimento_dinheiro_"));
+const VSL_DEBUG_ENABLED = new URLSearchParams(window.location.search).get("debugVsl") === "1";
+let fxCurrentSceneKey = "";
+let fxDebugBox = null;
+let fxImageRequestId = 0;
+const fxPreloadedImages = new Set();
+
+const FX_PART1_TIMELINE = [
+  { start: 0, end: 8, image: "assets/imgs/certidao.png", label: "Abertura / certidao" },
+  { start: 8, end: 35, image: "assets/imgs/certidao.png", label: "Nome e nascimento" },
+  { start: 35, end: 62, image: "assets/imgs/famosos.png", label: "Referencia Macedo Machado" },
+  { start: 62, end: 92, image: "assets/imgs/img_nome_vibracao.png", label: "Nome e vibracao" },
+  { start: 92, end: 124, image: "assets/imgs/frequencia.png", label: "Frequencia do nome" },
+  { start: 124, end: 154, image: "assets/imgs/fardo.png", label: "Peso energetico" },
+  { start: 154, end: 184, image: "assets/imgs/frequencia_justa.png", label: "Frequencia justa" },
+  { start: 184, end: 214, image: "assets/imgs/mantra.png", label: "Mantra vibracional" },
+  { start: 214, end: 244, image: "assets/imgs/biblico.png", label: "Base espiritual" },
+  { start: 244, end: 274, image: "assets/imgs/raro.png", label: "Ritual raro" },
+  { start: 274, end: 304, image: "assets/imgs/relax.png", label: "Relaxamento" },
+  { start: 304, end: 334, image: "assets/imgs/revelacao.png", label: "Revelacao" },
+  { start: 334, end: 354, image: "assets/imgs/loop1.gif", label: "Loop energetico" },
+  { start: 354, end: 370, image: "assets/imgs/bloqueio_frequencia.png", label: "Bloqueio de frequencia" },
+  { start: 370, end: Number.POSITIVE_INFINITY, image: "assets/imgs/caminho_frequencia.png", label: "Caminho da frequencia" }
+];
+
+const FX_PART2_TIMELINES = {
+  dinheiro: [
+    { start: 0, end: 52.57, image: "assets/imgs/analise_frequencia.png", label: "Analise da prosperidade" },
+    { start: 52.57, end: 121.77, image: "assets/imgs/img_submerso_energia.png", label: "Bloqueio energetico do dinheiro" },
+    { start: 121.77, end: 145.87, image: "assets/imgs/img_baldeFurado.png", label: "Balde furado da abundancia" },
+    { start: 145.87, end: 165.87, image: "assets/imgs/codigo_prosperidade.png", label: "Codigo de prosperidade" },
+    { start: 165.87, end: 246.44, image: "assets/imgs/img_mahila_dinheiro.png", label: "Historia Mahila prosperidade" },
+    { start: 246.44, end: 297.62, image: "assets/imgs/img_mahila_viagem.png", label: "Mosteiro e ritual" },
+    { start: 297.62, end: 326.32, image: "assets/imgs/img_desbloqueio.png", label: "Desbloqueio do nome" },
+    { start: 326.32, end: 358.56, image: "assets/imgs/img_portas.png", label: "Abrindo oportunidades" },
+    { start: 358.56, end: 367.44, image: "assets/imgs/img_transformacao.png", label: "Transformacao antes dos depoimentos" },
+    { start: 367.44, end: 391.84, image: "assets/imgs/img_depoimento_dinheiro_1.png", label: "Camila Torres" },
+    { start: 391.84, end: 411.18, image: "assets/imgs/img_depoimento_dinheiro_2.png", label: "Alvaro Mendonca" },
+    { start: 411.18, end: 431.76, image: "assets/imgs/img_depoimento_dinheiro_3.png", label: "Patricia Antunes" },
+    { start: 431.76, end: 465, image: "assets/imgs/img_sincronicidade.png", label: "Momento que nao se repete" },
+    { start: 465, end: 500, image: "assets/imgs/img_correntes.png", label: "Correntes energeticas" },
+    { start: 500, end: 532, image: "assets/imgs/img_darkaura.png", label: "Aura desalinhada" },
+    { start: 532, end: 552.67, image: "assets/imgs/img_escapar.png", label: "Escapar do bloqueio" },
+    { start: 552.67, end: 568.73, image: "assets/imgs/img_bloqueio.png", label: "Clique para liberar" },
+    { start: 568.73, end: Number.POSITIVE_INFINITY, image: "assets/imgs/img_realinhar.png", label: "Realinhar frequencia" }
+  ]
+};
+
+function fxBuildEvenTimeline(images, endTime, labelPrefix){
+  const cleanImages = (images || []).filter(Boolean);
+  const safeEnd = Number.isFinite(endTime) && endTime > 0 ? endTime : cleanImages.length * 20;
+  const slot = safeEnd / Math.max(1, cleanImages.length);
+
+  return cleanImages.map((image, index) => ({
+    start: index * slot,
+    end: index + 1 === cleanImages.length ? Number.POSITIVE_INFINITY : (index + 1) * slot,
+    image,
+    label: `${labelPrefix} ${index + 1}`
+  }));
+}
+
+function fxTimelineForCurrentPhase(){
+  if (fxPhase === "p2"){
+    return FX_PART2_TIMELINES[fxActiveP2Key] || fxBuildEvenTimeline(FX_PART2_GENERIC, fxDuration, `Parte 2 ${fxActiveP2Key}`);
+  }
+
+  return FX_PART1_TIMELINE;
+}
+
+function fxFindSceneAt(t, timeline){
+  const scenes = timeline || [];
+  return scenes.find((scene) => t >= scene.start && t < scene.end) || scenes[scenes.length - 1] || null;
+}
+
+function fxPreloadImage(src){
+  if (!src || fxPreloadedImages.has(src)) return;
+  fxPreloadedImages.add(src);
+  const image = new Image();
+  image.src = src;
+}
+
+function fxPreloadTimeline(timeline){
+  (timeline || []).forEach((scene) => fxPreloadImage(scene.image));
+}
+
+function fxEnsureDebugBox(){
+  if (!VSL_DEBUG_ENABLED) return null;
+  if (fxDebugBox) return fxDebugBox;
+
+  fxDebugBox = document.createElement("div");
+  fxDebugBox.className = "fx-debug";
+  document.body.appendChild(fxDebugBox);
+  return fxDebugBox;
+}
+
+function fxUpdateDebug(t, scene, index){
+  const box = fxEnsureDebugBox();
+  if (!box || !scene) return;
+
+  box.innerHTML = `
+    <strong>debugVsl</strong><br>
+    tempo: ${Number(t || 0).toFixed(2)}s<br>
+    cena: ${index}<br>
+    label: ${escapeHtml(scene.label || "")}<br>
+    imagem: ${escapeHtml(scene.image || "")}
+  `;
+}
+
+function fxApplySceneByTime(t){
+  const timeline = fxTimelineForCurrentPhase();
+  const scene = fxFindSceneAt(Number(t || 0), timeline);
+  if (!scene) return;
+
+  const index = timeline.indexOf(scene);
+  const key = `${fxPhase}:${fxActiveP2Key}:${index}:${scene.image}`;
+  if (key !== fxCurrentSceneKey){
+    fxCurrentSceneKey = key;
+    fxSetImage(scene.image);
+  }
+
+  fxUpdateDebug(t, scene, index);
+}
+
 /* =========================
    HELPERS
 ========================= */
@@ -29864,12 +30005,14 @@ function fxApplyVariant(audio){
   fxActiveElement = fxGetNatureElement();
   fxEmailPopupTime = fxFindEmailPopupTime(fxActiveCaptions);
   fxPhase = "p1";
+  fxCurrentSceneKey = "";
   capIdx = 0;
   fxNativeCaptionReady = false;
 
   const audioSrc = `captions/${fxActiveVariantKey}.mp3`;
   const trackSrc = `captions/${fxActiveVariantKey}.vtt`;
   fxSetAudioSources(audio, audioSrc, trackSrc);
+  fxPreloadTimeline(FX_PART1_TIMELINE);
   return { key: fxActiveVariantKey, audioSrc, trackSrc };
 }
 
@@ -29878,6 +30021,7 @@ function fxApplyP2Variant(audio){
   fxActiveCaptions = P2_CAPTION_SETS[fxActiveP2Key] || P2_CAPTION_SETS[DEFAULT_P2_VARIANT_KEY] || [];
   fxPhase = "p2";
   fxEmailPopupTime = Number.POSITIVE_INFINITY;
+  fxCurrentSceneKey = "";
   capIdx = 0;
   fxNativeCaptionReady = false;
 
@@ -29888,7 +30032,8 @@ function fxApplyP2Variant(audio){
   const trackSrc = `captions/p2_${fxActiveP2Key}.vtt`;
   fxSetAudioSources(audio, audioSrc, trackSrc);
   fxSetCaption("");
-  fxSetImage(FX_PART2[0]);
+  fxPreloadTimeline(fxTimelineForCurrentPhase());
+  fxApplySceneByTime(0);
   return { key: fxActiveP2Key, audioSrc, trackSrc };
 }
 
@@ -30039,8 +30184,10 @@ function fxSetImage(src){
   if (!img) return;
   if (img.getAttribute("data-src") === src) return;
 
+  const requestId = ++fxImageRequestId;
   img.style.opacity = "0";
   setTimeout(() => {
+    if (requestId !== fxImageRequestId) return;
     img.setAttribute("data-src", src);
     img.onerror = () => {
       img.style.opacity = "0";
@@ -30155,7 +30302,10 @@ function startFx(){
   if (fxText) fxText.textContent = "";
 
   // ---- daqui pra baixo pode ficar seu código normal (imagens/popup/progresso) ----
-  fxSetImage(FX_PART1[0]);
+  fxPreloadTimeline(FX_PART1_TIMELINE);
+  fxPreloadTimeline(FX_PART2_TIMELINES.dinheiro);
+  fxPreloadTimeline(fxBuildEvenTimeline(FX_PART2_GENERIC, 520, "Parte 2 generica"));
+  fxApplySceneByTime(0);
   fxSetIntroTitle(0);
 
   function syncBtn(){
@@ -30183,6 +30333,7 @@ function startFx(){
     const t = audio.currentTime;
     fxSetIntroTitle(t);
     fxRenderFallbackCaption(t);
+    fxApplySceneByTime(t);
 
     // progresso
     if (prog){
@@ -30198,17 +30349,10 @@ function startFx(){
       return;
     }
 
-    if (fxPhase === "p2"){
-      const slot2 = Math.max(0.001, fxDuration) / FX_PART2.length;
-      let idx2 = Math.floor(t / slot2);
-      idx2 = Math.max(0, Math.min(FX_PART2.length - 1, idx2));
-      fxSetImage(FX_PART2[idx2]);
-    } else if (t < fxEmailPopupTime){
-      const slot = fxEmailPopupTime / FX_PART1.length;
-      let idx = Math.floor(t / slot);
-      idx = Math.max(0, Math.min(FX_PART1.length - 1, idx));
-      fxSetImage(FX_PART1[idx]);
-    }
+  };
+
+  audio.onseeked = () => {
+    fxApplySceneByTime(audio.currentTime || 0);
   };
   function submitEmail(){
     const v = (emailInput?.value || "").trim();
