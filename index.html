@@ -1085,17 +1085,29 @@
 
 .fx-img,
 .fx-images img{
-  width: min(354px, 66%);
-  height: min(354px, 66%);
+  width:min(430px, 78%);
+  height:min(430px, 78%);
   max-width:none;
   max-height:none;
-  object-fit: cover;
+  object-fit:contain;
   display:block;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,.96);
+  border:0;
+  border-radius:0;
   clip-path:none;
   filter: drop-shadow(0 18px 35px rgba(0,0,0,.45));
   transition: opacity .18s ease;
+}
+
+.fx-images[data-layout="old-native"] .fx-img{
+  object-fit:contain;
+  border:0;
+  border-radius:0;
+}
+
+.fx-images[data-layout="old-circle"] .fx-img{
+  object-fit:contain;
+  border:0;
+  border-radius:0;
 }
 
 .fx-intro-title{
@@ -1207,8 +1219,8 @@
 
   .fx-img,
   .fx-images img{
-    width:min(300px, 72%);
-    height:min(300px, 72%);
+    width:min(320px, 78%);
+    height:min(320px, 78%);
   }
 
   .fx-intro-title{
@@ -1588,7 +1600,7 @@
       <div class="fx-grid">
 
         <!-- area das imagens -->
-        <div class="fx-images">
+        <div class="fx-images" data-layout="old-native">
           <div id="fxIntroTitle" class="fx-intro-title"></div>
           <img id="fxImg" class="fx-img" src="" alt="">
         </div>
@@ -29692,48 +29704,225 @@ const VSL_DEBUG_ENABLED = new URLSearchParams(window.location.search).get("debug
 let fxCurrentSceneKey = "";
 let fxDebugBox = null;
 let fxImageRequestId = 0;
+let fxActiveTimeline = [];
 const fxPreloadedImages = new Set();
 
-const FX_PART1_TIMELINE = [
-  { start: 0, end: 8, image: "assets/imgs/certidao.png", label: "Abertura / certidao" },
-  { start: 8, end: 35, image: "assets/imgs/certidao.png", label: "Nome e nascimento" },
-  { start: 35, end: 62, image: "assets/imgs/famosos.png", label: "Referencia Macedo Machado" },
-  { start: 62, end: 92, image: "assets/imgs/img_nome_vibracao.png", label: "Nome e vibracao" },
-  { start: 92, end: 124, image: "assets/imgs/frequencia.png", label: "Frequencia do nome" },
-  { start: 124, end: 154, image: "assets/imgs/fardo.png", label: "Peso energetico" },
-  { start: 154, end: 184, image: "assets/imgs/frequencia_justa.png", label: "Frequencia justa" },
-  { start: 184, end: 214, image: "assets/imgs/mantra.png", label: "Mantra vibracional" },
-  { start: 214, end: 244, image: "assets/imgs/biblico.png", label: "Base espiritual" },
-  { start: 244, end: 274, image: "assets/imgs/raro.png", label: "Ritual raro" },
-  { start: 274, end: 304, image: "assets/imgs/relax.png", label: "Relaxamento" },
-  { start: 304, end: 334, image: "assets/imgs/revelacao.png", label: "Revelacao" },
-  { start: 334, end: 354, image: "assets/imgs/loop1.gif", label: "Loop energetico" },
-  { start: 354, end: 370, image: "assets/imgs/bloqueio_frequencia.png", label: "Bloqueio de frequencia" },
-  { start: 370, end: Number.POSITIVE_INFINITY, image: "assets/imgs/caminho_frequencia.png", label: "Caminho da frequencia" }
+function fxOldScene(start, end, image, label, layout = "old-native", notes = ""){
+  return { start, end, image, label, layout, source: "old-site", notes };
+}
+
+const FX_PART1_OLD_TIMELINE = [
+  fxOldScene(9, 21, "assets/imgs/certidao.png", "Certidao de nascimento"),
+  fxOldScene(21, 46, "assets/imgs/famosos.png", "Famosos - Xuxa/Vera/Gusttavo/etc"),
+  fxOldScene(46, 54, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+  fxOldScene(54, 71, "assets/imgs/frequencia.png", "Frequencia do nome"),
+  fxOldScene(71, 85, "assets/imgs/fardo.png", "Fardo / portas fechadas"),
+  fxOldScene(85, 92, "assets/imgs/frequencia_justa.png", "Frequencia ajustada"),
+  fxOldScene(92, 112, "assets/imgs/mantra.png", "Mantra vibracional"),
+  fxOldScene(112, 131, "assets/imgs/biblico.png", "Tradicao biblica"),
+  fxOldScene(131, 150, "assets/imgs/raro.png", "Ritual raro"),
+  fxOldScene(150, 159, "assets/imgs/relax.png", "Respire fundo"),
+  fxOldScene(159, 161, "assets/imgs/revelacao.png", "Revelacao inicial"),
+  fxOldScene(161, 283, "assets/imgs/loop1.gif", "Loop energetico"),
+  fxOldScene(283, 333, "assets/imgs/bloqueio_frequencia.png", "Bloqueio de frequencia"),
+  fxOldScene(333, Number.POSITIVE_INFINITY, "assets/imgs/caminho_frequencia.png", "Caminho da frequencia"),
 ];
 
-const FX_PART2_TIMELINES = {
+const FX_PART2_OLD_TIMELINES = {
   dinheiro: [
-    { start: 0, end: 52.57, image: "assets/imgs/analise_frequencia.png", label: "Analise da prosperidade" },
-    { start: 52.57, end: 121.77, image: "assets/imgs/img_submerso_energia.png", label: "Bloqueio energetico do dinheiro" },
-    { start: 121.77, end: 145.87, image: "assets/imgs/img_baldeFurado.png", label: "Balde furado da abundancia" },
-    { start: 145.87, end: 165.87, image: "assets/imgs/codigo_prosperidade.png", label: "Codigo de prosperidade" },
-    { start: 165.87, end: 246.44, image: "assets/imgs/img_mahila_dinheiro.png", label: "Historia Mahila prosperidade" },
-    { start: 246.44, end: 297.62, image: "assets/imgs/img_mahila_viagem.png", label: "Mosteiro e ritual" },
-    { start: 297.62, end: 326.32, image: "assets/imgs/img_desbloqueio.png", label: "Desbloqueio do nome" },
-    { start: 326.32, end: 358.56, image: "assets/imgs/img_portas.png", label: "Abrindo oportunidades" },
-    { start: 358.56, end: 367.44, image: "assets/imgs/img_transformacao.png", label: "Transformacao antes dos depoimentos" },
-    { start: 367.44, end: 391.84, image: "assets/imgs/img_depoimento_dinheiro_1.png", label: "Camila Torres" },
-    { start: 391.84, end: 411.18, image: "assets/imgs/img_depoimento_dinheiro_2.png", label: "Alvaro Mendonca" },
-    { start: 411.18, end: 431.76, image: "assets/imgs/img_depoimento_dinheiro_3.png", label: "Patricia Antunes" },
-    { start: 431.76, end: 465, image: "assets/imgs/img_sincronicidade.png", label: "Momento que nao se repete" },
-    { start: 465, end: 500, image: "assets/imgs/img_correntes.png", label: "Correntes energeticas" },
-    { start: 500, end: 532, image: "assets/imgs/img_darkaura.png", label: "Aura desalinhada" },
-    { start: 532, end: 552.67, image: "assets/imgs/img_escapar.png", label: "Escapar do bloqueio" },
-    { start: 552.67, end: 568.73, image: "assets/imgs/img_bloqueio.png", label: "Clique para liberar" },
-    { start: 568.73, end: Number.POSITIVE_INFINITY, image: "assets/imgs/img_realinhar.png", label: "Realinhar frequencia" }
-  ]
+    fxOldScene(5, 24, "assets/imgs/analise_frequencia.png", "Analise de frequencia"),
+    fxOldScene(24, 59, "assets/imgs/img_submerso_energia.png", "Energia submersa"),
+    fxOldScene(59, 90, "assets/imgs/img_fardo.png", "Fardo energetico"),
+    fxOldScene(90, 130, "assets/imgs/img_baldeFurado.png", "Balde furado"),
+    fxOldScene(130, 146, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+    fxOldScene(146, 174, "assets/imgs/codigo_prosperidade.png", "Codigo de prosperidade"),
+    fxOldScene(174, 195, "assets/imgs/img_mahila_dinheiro.png", "Mahila / dinheiro"),
+    fxOldScene(195, 209, "assets/imgs/img_peso.png", "Peso invisivel"),
+    fxOldScene(209, 220, "assets/imgs/img_mahila_viagem.png", "Mosteiro no Nepal"),
+    fxOldScene(220, 255, "assets/imgs/img_desbloqueio.png", "Desbloqueio"),
+    fxOldScene(255, 298, "assets/imgs/img_portas.png", "Portas se abrindo"),
+    fxOldScene(298, 326, "assets/imgs/img_transformacao.png", "Transformacao"),
+    fxOldScene(326, 342, "assets/imgs/img_aviso.png", "Aviso"),
+    fxOldScene(342, 367, "assets/imgs/img_bencao.png", "Bencao"),
+    fxOldScene(367, 392, "assets/imgs/img_depoimento_dinheiro_1.png", "Camila Torres"),
+    fxOldScene(392, 411, "assets/imgs/img_depoimento_dinheiro_2.png", "Alvaro Mendonca"),
+    fxOldScene(411, 432, "assets/imgs/img_depoimento_dinheiro_3.png", "Patricia Antunes"),
+    fxOldScene(432, 456, "assets/imgs/img_sincronicidade.png", "Sincronicidade"),
+    fxOldScene(456, 470, "assets/imgs/img_correntes.png", "Correntes energeticas"),
+    fxOldScene(470, 474, "assets/imgs/img_darkaura.png", "Aura escura"),
+    fxOldScene(474, 477, "assets/imgs/img_escapar.png", "Escapar do bloqueio"),
+    fxOldScene(477, 483, "assets/imgs/img_bloqueio.png", "Bloqueio final"),
+    fxOldScene(483, Number.POSITIVE_INFINITY, "assets/imgs/img_realinhar.png", "Realinhar frequencia"),
+  ],
+  felicidade: [
+    fxOldScene(5, 24, "assets/imgs/analise_frequencia.png", "Analise de frequencia"),
+    fxOldScene(24, 59, "assets/imgs/img_submerso_energia.png", "Energia submersa"),
+    fxOldScene(59, 99, "assets/imgs/img_fardo.png", "Fardo energetico"),
+    fxOldScene(99, 135, "assets/imgs/img_baldeFurado.png", "Balde furado"),
+    fxOldScene(135, 159, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+    fxOldScene(159, 198, "assets/imgs/codigo_prosperidade_amor.png", "Codigo de prosperidade no amor"),
+    fxOldScene(198, 231, "assets/imgs/img_mahila_felicidade.png", "Mahila / felicidade"),
+    fxOldScene(231, 245, "assets/imgs/img_peso.png", "Peso invisivel"),
+    fxOldScene(245, 255, "assets/imgs/img_mahila_viagem.png", "Mosteiro no Nepal"),
+    fxOldScene(255, 296, "assets/imgs/img_desbloqueio.png", "Desbloqueio"),
+    fxOldScene(296, 337, "assets/imgs/img_portas.png", "Portas se abrindo"),
+    fxOldScene(337, 375, "assets/imgs/img_transformacao.png", "Transformacao"),
+    fxOldScene(375, 392, "assets/imgs/img_aviso.png", "Aviso"),
+    fxOldScene(392, 416, "assets/imgs/img_bencao.png", "Bencao"),
+    fxOldScene(416, 433, "assets/imgs/img_depoimento_felicidade_1.png", "Depoimento felicidade 1"),
+    fxOldScene(433, 450, "assets/imgs/img_depoimento_felicidade_2.png", "Depoimento felicidade 2"),
+    fxOldScene(450, 467, "assets/imgs/img_depoimento_felicidade_3.png", "Depoimento felicidade 3"),
+    fxOldScene(467, 500, "assets/imgs/img_sincronicidade.png", "Sincronicidade"),
+    fxOldScene(500, 515, "assets/imgs/img_correntes.png", "Correntes energeticas"),
+    fxOldScene(515, 519, "assets/imgs/img_darkaura.png", "Aura escura"),
+    fxOldScene(519, 525, "assets/imgs/img_escapar.png", "Escapar do bloqueio"),
+    fxOldScene(525, 531, "assets/imgs/img_bloqueio.png", "Bloqueio final"),
+    fxOldScene(531, Number.POSITIVE_INFINITY, "assets/imgs/img_realinhar.png", "Realinhar frequencia"),
+  ],
+  h_casado: [
+    fxOldScene(5, 24, "assets/imgs/analise_frequencia.png", "Analise de frequencia"),
+    fxOldScene(24, 59, "assets/imgs/img_submerso_energia.png", "Energia submersa"),
+    fxOldScene(59, 125, "assets/imgs/img_potencial_amor.png", "Potencial do amor"),
+    fxOldScene(125, 150, "assets/imgs/img_baldeFurado.png", "Balde furado"),
+    fxOldScene(150, 179, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+    fxOldScene(179, 195, "assets/imgs/codigo_prosperidade_amor.png", "Codigo de prosperidade no amor"),
+    fxOldScene(195, 226, "assets/imgs/img_mahila_casada.png", "Mahila / casada"),
+    fxOldScene(226, 249, "assets/imgs/img_peso.png", "Peso invisivel"),
+    fxOldScene(249, 259, "assets/imgs/img_mahila_viagem.png", "Mosteiro no Nepal"),
+    fxOldScene(259, 298, "assets/imgs/img_desbloqueio.png", "Desbloqueio"),
+    fxOldScene(298, 349, "assets/imgs/img_portas.png", "Portas se abrindo"),
+    fxOldScene(349, 389, "assets/imgs/img_transformacao.png", "Transformacao"),
+    fxOldScene(389, 403, "assets/imgs/img_aviso.png", "Aviso"),
+    fxOldScene(403, 428, "assets/imgs/img_bencao.png", "Bencao"),
+    fxOldScene(428, 446, "assets/imgs/img_depoimento_casado_1.png", "Depoimento casado 1"),
+    fxOldScene(446, 467, "assets/imgs/img_depoimento_casado_2.png", "Depoimento casado 2"),
+    fxOldScene(467, 487, "assets/imgs/img_depoimento_casado_3.png", "Depoimento casado 3"),
+    fxOldScene(487, 523, "assets/imgs/img_sincronicidade.png", "Sincronicidade"),
+    fxOldScene(523, 539, "assets/imgs/img_correntes.png", "Correntes energeticas"),
+    fxOldScene(539, 544, "assets/imgs/img_darkaura.png", "Aura escura"),
+    fxOldScene(544, 548, "assets/imgs/img_escapar.png", "Escapar do bloqueio"),
+    fxOldScene(548, 557, "assets/imgs/img_bloqueio.png", "Bloqueio final"),
+    fxOldScene(557, Number.POSITIVE_INFINITY, "assets/imgs/img_realinhar.png", "Realinhar frequencia"),
+  ],
+  h_solteiro: [
+    fxOldScene(5, 24, "assets/imgs/analise_frequencia.png", "Analise de frequencia"),
+    fxOldScene(24, 59, "assets/imgs/img_submerso_energia.png", "Energia submersa"),
+    fxOldScene(59, 94, "assets/imgs/img_potencial_amor.png", "Potencial do amor"),
+    fxOldScene(94, 137, "assets/imgs/img_baldeFurado.png", "Balde furado"),
+    fxOldScene(137, 173, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+    fxOldScene(173, 212, "assets/imgs/codigo_prosperidade_amor.png", "Codigo de prosperidade no amor"),
+    fxOldScene(212, 234, "assets/imgs/img_mahila_solteira.png", "Mahila / solteira"),
+    fxOldScene(234, 249, "assets/imgs/img_peso.png", "Peso invisivel"),
+    fxOldScene(249, 260, "assets/imgs/img_mahila_viagem.png", "Mosteiro no Nepal"),
+    fxOldScene(260, 296, "assets/imgs/img_desbloqueio.png", "Desbloqueio"),
+    fxOldScene(296, 345, "assets/imgs/img_portas.png", "Portas se abrindo"),
+    fxOldScene(345, 377, "assets/imgs/img_transformacao.png", "Transformacao"),
+    fxOldScene(377, 392, "assets/imgs/img_aviso.png", "Aviso"),
+    fxOldScene(392, 420, "assets/imgs/img_bencao.png", "Bencao"),
+    fxOldScene(420, 450, "assets/imgs/img_depoimento_solteiro_1.png", "Depoimento solteiro 1"),
+    fxOldScene(450, 476, "assets/imgs/img_depoimento_solteiro_2.png", "Depoimento solteiro 2"),
+    fxOldScene(476, 503, "assets/imgs/img_depoimento_solteiro_3.png", "Depoimento solteiro 3"),
+    fxOldScene(503, 524, "assets/imgs/img_sincronicidade.png", "Sincronicidade"),
+    fxOldScene(524, 539, "assets/imgs/img_correntes.png", "Correntes energeticas"),
+    fxOldScene(539, 542, "assets/imgs/img_darkaura.png", "Aura escura"),
+    fxOldScene(542, 546, "assets/imgs/img_escapar.png", "Escapar do bloqueio"),
+    fxOldScene(546, 554, "assets/imgs/img_bloqueio.png", "Bloqueio final"),
+    fxOldScene(554, Number.POSITIVE_INFINITY, "assets/imgs/img_realinhar.png", "Realinhar frequencia"),
+  ],
+  m_casada: [
+    fxOldScene(5, 24, "assets/imgs/analise_frequencia.png", "Analise de frequencia"),
+    fxOldScene(24, 59, "assets/imgs/img_submerso_energia.png", "Energia submersa"),
+    fxOldScene(59, 122, "assets/imgs/img_potencial_amor.png", "Potencial do amor"),
+    fxOldScene(122, 131, "assets/imgs/img_baldeFurado.png", "Balde furado"),
+    fxOldScene(131, 170, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+    fxOldScene(170, 213, "assets/imgs/codigo_prosperidade_amor.png", "Codigo de prosperidade no amor"),
+    fxOldScene(213, 243, "assets/imgs/img_mahila_casada.png", "Mahila / casada"),
+    fxOldScene(243, 265, "assets/imgs/img_peso.png", "Peso invisivel"),
+    fxOldScene(265, 275, "assets/imgs/img_mahila_viagem.png", "Mosteiro no Nepal"),
+    fxOldScene(275, 315, "assets/imgs/img_desbloqueio.png", "Desbloqueio"),
+    fxOldScene(315, 358, "assets/imgs/img_portas.png", "Portas se abrindo"),
+    fxOldScene(358, 398, "assets/imgs/img_transformacao.png", "Transformacao"),
+    fxOldScene(398, 414, "assets/imgs/img_aviso.png", "Aviso"),
+    fxOldScene(414, 441, "assets/imgs/img_bencao.png", "Bencao"),
+    fxOldScene(441, 458, "assets/imgs/img_depoimento_casada_1.png", "Depoimento casada 1"),
+    fxOldScene(458, 477, "assets/imgs/img_depoimento_casada_2.png", "Depoimento casada 2"),
+    fxOldScene(477, 497, "assets/imgs/img_depoimento_casada_3.png", "Depoimento casada 3"),
+    fxOldScene(497, 533, "assets/imgs/img_sincronicidade.png", "Sincronicidade"),
+    fxOldScene(533, 547, "assets/imgs/img_correntes.png", "Correntes energeticas"),
+    fxOldScene(547, 552, "assets/imgs/img_darkaura.png", "Aura escura"),
+    fxOldScene(552, 556, "assets/imgs/img_escapar.png", "Escapar do bloqueio"),
+    fxOldScene(556, 559, "assets/imgs/img_bloqueio.png", "Bloqueio final"),
+    fxOldScene(559, Number.POSITIVE_INFINITY, "assets/imgs/img_realinhar.png", "Realinhar frequencia"),
+  ],
+  m_solteira: [
+    fxOldScene(5, 24, "assets/imgs/analise_frequencia.png", "Analise de frequencia"),
+    fxOldScene(24, 59, "assets/imgs/img_submerso_energia.png", "Energia submersa"),
+    fxOldScene(59, 101, "assets/imgs/img_potencial_amor.png", "Potencial do amor"),
+    fxOldScene(101, 125, "assets/imgs/img_baldeFurado.png", "Balde furado"),
+    fxOldScene(125, 163, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+    fxOldScene(163, 204, "assets/imgs/codigo_prosperidade_amor.png", "Codigo de prosperidade no amor"),
+    fxOldScene(204, 226, "assets/imgs/img_mahila_solteira.png", "Mahila / solteira"),
+    fxOldScene(226, 240, "assets/imgs/img_peso.png", "Peso invisivel"),
+    fxOldScene(240, 250, "assets/imgs/img_mahila_viagem.png", "Mosteiro no Nepal"),
+    fxOldScene(250, 285, "assets/imgs/img_desbloqueio.png", "Desbloqueio"),
+    fxOldScene(285, 335, "assets/imgs/img_portas.png", "Portas se abrindo"),
+    fxOldScene(335, 371, "assets/imgs/img_transformacao.png", "Transformacao"),
+    fxOldScene(371, 385, "assets/imgs/img_aviso.png", "Aviso"),
+    fxOldScene(385, 409, "assets/imgs/img_bencao.png", "Bencao"),
+    fxOldScene(409, 433, "assets/imgs/img_depoimento_solteira_1.png", "Depoimento solteira 1"),
+    fxOldScene(433, 450, "assets/imgs/img_depoimento_solteira_2.png", "Depoimento solteira 2"),
+    fxOldScene(450, 471, "assets/imgs/img_depoimento_solteira_3.png", "Depoimento solteira 3"),
+    fxOldScene(471, 496, "assets/imgs/img_sincronicidade.png", "Sincronicidade"),
+    fxOldScene(496, 511, "assets/imgs/img_correntes.png", "Correntes energeticas"),
+    fxOldScene(511, 514, "assets/imgs/img_darkaura.png", "Aura escura"),
+    fxOldScene(514, 518, "assets/imgs/img_escapar.png", "Escapar do bloqueio"),
+    fxOldScene(518, 523, "assets/imgs/img_bloqueio.png", "Bloqueio final"),
+    fxOldScene(523, Number.POSITIVE_INFINITY, "assets/imgs/img_realinhar.png", "Realinhar frequencia"),
+  ],
+  saude: [
+    fxOldScene(5, 24, "assets/imgs/analise_frequencia.png", "Analise de frequencia"),
+    fxOldScene(24, 59, "assets/imgs/img_submerso_energia.png", "Energia submersa"),
+    fxOldScene(59, 98, "assets/imgs/img_fardo.png", "Fardo energetico"),
+    fxOldScene(98, 135, "assets/imgs/img_baldeFurado.png", "Balde furado"),
+    fxOldScene(135, 151, "assets/imgs/img_nome_vibracao.png", "Nome e vibracao"),
+    fxOldScene(151, 164, "assets/imgs/codigo_prosperidade_saude.png", "Codigo de prosperidade na saude"),
+    fxOldScene(164, 177, "assets/imgs/img_mahila_saude.png", "Mahila / saude"),
+    fxOldScene(177, 217, "assets/imgs/img_peso.png", "Peso invisivel"),
+    fxOldScene(217, 228, "assets/imgs/img_mahila_viagem.png", "Mosteiro no Nepal"),
+    fxOldScene(228, 267, "assets/imgs/img_desbloqueio.png", "Desbloqueio"),
+    fxOldScene(267, 305, "assets/imgs/img_portas.png", "Portas se abrindo"),
+    fxOldScene(305, 342, "assets/imgs/img_transformacao.png", "Transformacao"),
+    fxOldScene(342, 358, "assets/imgs/img_aviso.png", "Aviso"),
+    fxOldScene(358, 385, "assets/imgs/img_bencao.png", "Bencao"),
+    fxOldScene(385, 403, "assets/imgs/img_depoimento_saude_1.png", "Depoimento saude 1"),
+    fxOldScene(403, 416, "assets/imgs/img_depoimento_saude_2.png", "Depoimento saude 2"),
+    fxOldScene(416, 437, "assets/imgs/img_depoimento_saude_3.png", "Depoimento saude 3"),
+    fxOldScene(437, 463, "assets/imgs/img_sincronicidade.png", "Sincronicidade"),
+    fxOldScene(463, 477, "assets/imgs/img_correntes.png", "Correntes energeticas"),
+    fxOldScene(477, 482, "assets/imgs/img_darkaura.png", "Aura escura"),
+    fxOldScene(482, 487, "assets/imgs/img_escapar.png", "Escapar do bloqueio"),
+    fxOldScene(487, 491, "assets/imgs/img_bloqueio.png", "Bloqueio final"),
+    fxOldScene(491, Number.POSITIVE_INFINITY, "assets/imgs/img_realinhar.png", "Realinhar frequencia"),
+  ],
 };
+
+function fxBuildPart1Timeline(){
+  return FX_PART1_OLD_TIMELINE;
+}
+
+function fxBuildPart2FallbackTimeline(captions, key){
+  const lastCue = (captions || [])[Math.max(0, (captions || []).length - 1)];
+  const endTime = lastCue && Number.isFinite(lastCue.end) ? lastCue.end : fxDuration;
+  return fxBuildEvenTimeline(FX_PART2_GENERIC, endTime, "Parte 2 " + (key || "generica")).map(scene => ({
+    ...scene,
+    layout: "old-native",
+    source: "manual-fallback"
+  }));
+}
+
+function fxBuildPart2Timeline(key, captions){
+  return FX_PART2_OLD_TIMELINES[key] || fxBuildPart2FallbackTimeline(captions, key);
+}
 
 function fxBuildEvenTimeline(images, endTime, labelPrefix){
   const cleanImages = (images || []).filter(Boolean);
@@ -29749,11 +29938,7 @@ function fxBuildEvenTimeline(images, endTime, labelPrefix){
 }
 
 function fxTimelineForCurrentPhase(){
-  if (fxPhase === "p2"){
-    return FX_PART2_TIMELINES[fxActiveP2Key] || fxBuildEvenTimeline(FX_PART2_GENERIC, fxDuration, `Parte 2 ${fxActiveP2Key}`);
-  }
-
-  return FX_PART1_TIMELINE;
+  return fxActiveTimeline || [];
 }
 
 function fxFindSceneAt(t, timeline){
@@ -29791,8 +29976,18 @@ function fxUpdateDebug(t, scene, index){
     tempo: ${Number(t || 0).toFixed(2)}s<br>
     cena: ${index}<br>
     label: ${escapeHtml(scene.label || "")}<br>
+    inicio: ${Number(scene.start || 0).toFixed(2)}s<br>
+    fim: ${Number.isFinite(scene.end) ? Number(scene.end).toFixed(2) + "s" : "fim"}<br>
+    layout: ${escapeHtml(scene.layout || "")}<br>
+    fonte: ${escapeHtml(scene.source || "")}<br>
     imagem: ${escapeHtml(scene.image || "")}
   `;
+}
+
+function fxApplySceneLayout(scene){
+  const box = document.querySelector("#step11 .fx-images");
+  if (!box || !scene) return;
+  box.dataset.layout = scene.layout || "old-native";
 }
 
 function fxApplySceneByTime(t){
@@ -29801,9 +29996,10 @@ function fxApplySceneByTime(t){
   if (!scene) return;
 
   const index = timeline.indexOf(scene);
-  const key = `${fxPhase}:${fxActiveP2Key}:${index}:${scene.image}`;
+  const key = `${fxPhase}:${fxActiveP2Key}:${index}:${scene.image}:${scene.layout}`;
   if (key !== fxCurrentSceneKey){
     fxCurrentSceneKey = key;
+    fxApplySceneLayout(scene);
     fxSetImage(scene.image);
   }
 
@@ -30008,11 +30204,12 @@ function fxApplyVariant(audio){
   fxCurrentSceneKey = "";
   capIdx = 0;
   fxNativeCaptionReady = false;
+  fxActiveTimeline = fxBuildPart1Timeline(fxActiveCaptions);
 
   const audioSrc = `captions/${fxActiveVariantKey}.mp3`;
   const trackSrc = `captions/${fxActiveVariantKey}.vtt`;
   fxSetAudioSources(audio, audioSrc, trackSrc);
-  fxPreloadTimeline(FX_PART1_TIMELINE);
+  fxPreloadTimeline(fxActiveTimeline);
   return { key: fxActiveVariantKey, audioSrc, trackSrc };
 }
 
@@ -30027,12 +30224,13 @@ function fxApplyP2Variant(audio){
 
   const lastCue = fxActiveCaptions[fxActiveCaptions.length - 1];
   if (lastCue && Number.isFinite(lastCue.end)) fxDuration = lastCue.end;
+  fxActiveTimeline = fxBuildPart2Timeline(fxActiveP2Key, fxActiveCaptions);
 
   const audioSrc = `captions/p2_${fxActiveP2Key}.mp3`;
   const trackSrc = `captions/p2_${fxActiveP2Key}.vtt`;
   fxSetAudioSources(audio, audioSrc, trackSrc);
   fxSetCaption("");
-  fxPreloadTimeline(fxTimelineForCurrentPhase());
+  fxPreloadTimeline(fxActiveTimeline);
   fxApplySceneByTime(0);
   return { key: fxActiveP2Key, audioSrc, trackSrc };
 }
@@ -30302,7 +30500,7 @@ function startFx(){
   if (fxText) fxText.textContent = "";
 
   // ---- daqui pra baixo pode ficar seu código normal (imagens/popup/progresso) ----
-  fxPreloadTimeline(FX_PART1_TIMELINE);
+  fxPreloadTimeline(fxActiveTimeline);
   fxPreloadTimeline(FX_PART2_TIMELINES.dinheiro);
   fxPreloadTimeline(fxBuildEvenTimeline(FX_PART2_GENERIC, 520, "Parte 2 generica"));
   fxApplySceneByTime(0);
