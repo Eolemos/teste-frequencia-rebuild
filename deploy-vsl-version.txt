@@ -1,0 +1,5 @@
+﻿Deploy forçado da VSL
+Data: 2026-07-04 16:34:02
+
+Motivo:
+Forçar GitHub Pages a republicar index.html e assets/imgs oficiais.
