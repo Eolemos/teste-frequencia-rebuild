@@ -30924,3 +30924,55 @@ function bindVttToFxText(audioEl){
 
 
 
+
+
+/* MOBILE AUDIO BACKGROUND PAUSE - CLIENT SAFETY */
+(function(){
+  function getMainAudio(){
+    return document.getElementById("fxAudio");
+  }
+
+  function pauseMainAudio(){
+    const audio = getMainAudio();
+    if (!audio) return;
+
+    try {
+      if (!audio.paused && !audio.ended) {
+        audio.pause();
+      }
+    } catch(e){}
+  }
+
+  function clearMediaSession(){
+    try {
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = null;
+
+        ["play", "pause", "previoustrack", "nexttrack", "seekbackward", "seekforward", "seekto", "stop"].forEach(function(action){
+          try { navigator.mediaSession.setActionHandler(action, null); } catch(e){}
+        });
+      }
+    } catch(e){}
+  }
+
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) {
+      pauseMainAudio();
+      clearMediaSession();
+    }
+  });
+
+  window.addEventListener("pagehide", function(){
+    pauseMainAudio();
+    clearMediaSession();
+  });
+
+  window.addEventListener("blur", function(){
+    setTimeout(function(){
+      if (document.hidden) {
+        pauseMainAudio();
+        clearMediaSession();
+      }
+    }, 150);
+  });
+})();
