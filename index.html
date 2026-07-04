@@ -30926,53 +30926,150 @@ function bindVttToFxText(audioEl){
 
 
 
-/* MOBILE AUDIO BACKGROUND PAUSE - CLIENT SAFETY */
+/* MOBILE AUDIO BACKGROUND PAUSE - CLIENT SAFETY V2 */
 (function(){
+  function isMobileLike(){
+    try {
+      return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "")
+        || (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    } catch(e){
+      return true;
+    }
+  }
+
   function getMainAudio(){
     return document.getElementById("fxAudio");
   }
 
-  function pauseMainAudio(){
+  function clearMediaSession(){
+    try {
+      if (!("mediaSession" in navigator)) return;
+
+      navigator.mediaSession.metadata = null;
+
+      try { navigator.mediaSession.playbackState = "none"; } catch(e){}
+
+      [
+        "play",
+        "pause",
+        "stop",
+        "previoustrack",
+        "nexttrack",
+        "seekbackward",
+        "seekforward",
+        "seekto"
+      ].forEach(function(action){
+        try {
+          navigator.mediaSession.setActionHandler(action, function(){
+            forcePauseMainAudio("mediaSession:" + action);
+          });
+        } catch(e){}
+      });
+    } catch(e){}
+  }
+
+  function prepareAudio(){
     const audio = getMainAudio();
     if (!audio) return;
 
-    try {
-      if (!audio.paused && !audio.ended) {
-        audio.pause();
-      }
-    } catch(e){}
+    try { audio.disableRemotePlayback = true; } catch(e){}
+    try { audio.setAttribute("controlsList", "nodownload noplaybackrate noremoteplayback"); } catch(e){}
+
+    if (!audio.__mobilePauseGuardAttached) {
+      audio.__mobilePauseGuardAttached = true;
+
+      audio.addEventListener("play", function(){
+        if (document.hidden) {
+          forcePauseMainAudio("play-hidden");
+          return;
+        }
+
+        try {
+          if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = null;
+            navigator.mediaSession.playbackState = "playing";
+          }
+        } catch(e){}
+      });
+    }
   }
 
-  function clearMediaSession(){
+  function forcePauseMainAudio(reason){
+    const audio = getMainAudio();
+    if (!audio) return;
+
+    try { audio.pause(); } catch(e){}
+    try { audio.autoplay = false; } catch(e){}
+
+    // força o Android/Chrome a abandonar controle ativo
     try {
       if ("mediaSession" in navigator) {
         navigator.mediaSession.metadata = null;
-
-        ["play", "pause", "previoustrack", "nexttrack", "seekbackward", "seekforward", "seekto", "stop"].forEach(function(action){
-          try { navigator.mediaSession.setActionHandler(action, null); } catch(e){}
-        });
+        navigator.mediaSession.playbackState = "none";
       }
+    } catch(e){}
+
+    // micro mute ajuda alguns Androids a derrubarem o card ativo
+    try { audio.muted = true; } catch(e){}
+    setTimeout(function(){
+      try { audio.muted = false; } catch(e){}
+    }, 350);
+
+    clearMediaSession();
+
+    try {
+      window.__bslLastMobilePauseReason = reason || "background";
     } catch(e){}
   }
 
+  function backgroundPause(reason){
+    prepareAudio();
+
+    // No mobile, blur já significa risco de tocar em segundo plano.
+    // Então pausa sem depender de document.hidden.
+    if (isMobileLike()) {
+      forcePauseMainAudio(reason);
+      return;
+    }
+
+    if (document.hidden) {
+      forcePauseMainAudio(reason);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    prepareAudio();
+    clearMediaSession();
+  });
+
   document.addEventListener("visibilitychange", function(){
     if (document.hidden) {
-      pauseMainAudio();
-      clearMediaSession();
+      backgroundPause("visibilitychange-hidden");
     }
   });
 
-  window.addEventListener("pagehide", function(){
-    pauseMainAudio();
-    clearMediaSession();
+  document.addEventListener("webkitvisibilitychange", function(){
+    if (document.hidden) {
+      backgroundPause("webkitvisibilitychange-hidden");
+    }
   });
 
   window.addEventListener("blur", function(){
     setTimeout(function(){
-      if (document.hidden) {
-        pauseMainAudio();
-        clearMediaSession();
-      }
-    }, 150);
+      backgroundPause("window-blur");
+    }, 50);
+  });
+
+  window.addEventListener("pagehide", function(){
+    backgroundPause("pagehide");
+  });
+
+  window.addEventListener("freeze", function(){
+    backgroundPause("freeze");
+  });
+
+  window.addEventListener("beforeunload", function(){
+    backgroundPause("beforeunload");
   });
 })();
+
