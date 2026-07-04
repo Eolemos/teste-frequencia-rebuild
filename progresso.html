@@ -9,7 +9,7 @@
 <body>
   <main>
     <h1>Progresso da jornada</h1>
-    <p class="center">Acompanhe os 7 dias da sua sessão de frequência.</p>
+    <p class="center">Acompanhe os 7 dias da sua sessao de frequencia.</p>
 
     <div id="content"></div>
   </main>
@@ -38,7 +38,7 @@
 
     async function boot() {
       if (!token) {
-        MemberApi.showError(content, new Error("Token nao encontrado."));
+        MemberApi.showTokenLogin(content);
         return;
       }
 
@@ -49,6 +49,9 @@
         const progress = data.progress || {};
         const days = progress.days || [];
         const completed = progress.completedDays || [];
+        const bonusText = progress.bonusUnlocked
+          ? "Abrir bonus secreto"
+          : "Bonus secreto libera apos concluir 7 dias";
 
         content.innerHTML = `
           <div class="panel center">
@@ -59,8 +62,9 @@
           ${days.map((day) => dayCard(day, progress.requiredListenSecondsPerDay)).join("")}
 
           <div class="actions">
-            <a class="button" href="${MemberApi.pageUrl("frequencia", token)}">Continuar frequência</a>
-            <a class="button secondary" href="${MemberApi.pageUrl("bonus", token)}">Ver bônus secreto</a>
+            <a class="button" href="${MemberApi.pageUrl("frequencia", token)}">Continuar frequencia</a>
+            <a class="button secondary" href="${MemberApi.pageUrl("bonus", token)}">${bonusText}</a>
+            ${MemberApi.backToPanelHtml(token)}
           </div>
         `;
       } catch (error) {

@@ -83,7 +83,7 @@
 
     async function boot() {
       if (!token) {
-        MemberApi.showError(statusEl, new Error("Token nao encontrado. Abra o link que chegou no seu e-mail."));
+        MemberApi.showTokenLogin(statusEl);
         return;
       }
 
@@ -91,10 +91,20 @@
 
       try {
         const data = await MemberApi.access(token);
+        if (data.hasSubmittedProfile) {
+          window.location.href = MemberApi.pageUrl("membros", token);
+          return;
+        }
+
         const customer = data.customer || {};
 
         form.elements.name.value = customer.name || "";
         form.elements.email.value = customer.email || "";
+        if (customer.birthDate) {
+          form.elements.birthDay.value = customer.birthDate.day || "";
+          form.elements.birthMonth.value = customer.birthDate.month || "";
+          form.elements.birthYear.value = customer.birthDate.year || "";
+        }
 
         statusEl.innerHTML = `
           <div class="panel center">
@@ -114,13 +124,14 @@
       const button = form.querySelector("button");
       button.disabled = true;
       button.textContent = "Preparando...";
+      MemberApi.setLoading(statusEl, "Preparando seus dados...");
 
       const payload = Object.fromEntries(new FormData(form).entries());
       payload.emailPermission = form.elements.emailPermission.checked;
 
       try {
-        const response = await MemberApi.submitAccess(token, payload);
-        window.location.href = response.deliveryUrl || MemberApi.pageUrl("entrega", token);
+        await MemberApi.submitAccess(token, payload);
+        window.location.href = MemberApi.pageUrl("entrega", token);
       } catch (error) {
         MemberApi.showError(statusEl, error);
         button.disabled = false;

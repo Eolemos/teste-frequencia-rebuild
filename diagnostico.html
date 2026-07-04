@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Diagnóstico bônus</title>
+  <title>Diagnostico bonus</title>
   <link rel="stylesheet" href="css/member-area.css" />
 </head>
 <body>
   <main>
-    <h1>Diagnóstico bônus</h1>
-    <p class="center">Responda para personalizar sua orientação de frequência.</p>
+    <h1>Diagnostico bonus</h1>
+    <p class="center">Responda para personalizar sua orientacao de frequencia.</p>
 
     <div id="content"></div>
   </main>
@@ -38,7 +38,8 @@
             `).join("")}
           </div>
           <div class="actions">
-            <button type="submit">Salvar diagnóstico</button>
+            <button type="submit">Salvar diagnostico</button>
+            ${MemberApi.backToPanelHtml(token)}
           </div>
         </form>
       `;
@@ -61,7 +62,7 @@
 
     async function boot() {
       if (!token) {
-        MemberApi.showError(content, new Error("Token nao encontrado."));
+        MemberApi.showTokenLogin(content);
         return;
       }
 

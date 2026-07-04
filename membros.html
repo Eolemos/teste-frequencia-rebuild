@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Área de membros</title>
+  <title>&Aacute;rea de membros</title>
   <link rel="stylesheet" href="css/member-area.css" />
 </head>
 <body>
   <main>
-    <h1>Área de membros</h1>
+    <h1>&Aacute;rea de membros</h1>
     <p class="center">Use o token enviado por e-mail para acessar seus materiais e sua jornada.</p>
 
     <div id="content"></div>
@@ -19,30 +19,16 @@
     const initialToken = MemberApi.getToken();
     const content = document.querySelector("#content");
 
-    function loginForm() {
-      content.innerHTML = `
-        <form id="loginForm" class="panel">
-          <label>
-            Token enviado por e-mail
-            <input name="token" autocomplete="one-time-code" required />
-          </label>
-          <button type="submit">Entrar</button>
-        </form>
-      `;
-
-      document.querySelector("#loginForm").addEventListener("submit", (event) => {
-        event.preventDefault();
-        const token = MemberApi.setToken(event.currentTarget.elements.token.value);
-        window.location.href = MemberApi.pageUrl("membros", token);
-      });
-    }
-
     function dashboard(data) {
       const progress = data.progress || {};
       const completed = (progress.completedDays || []).length;
+      const bonusUnlocked = Boolean(progress.bonusUnlocked);
       const diagnosticText = data.diagnostic?.completed
         ? "Diagnostico respondido"
         : "Responder diagnostico bonus";
+      const bonusText = bonusUnlocked
+        ? "Abrir bonus secreto"
+        : "Bonus secreto libera apos concluir 7 dias";
 
       content.innerHTML = `
         <div class="panel center">
@@ -52,18 +38,18 @@
         </div>
 
         <div class="actions">
-          <a class="button" href="${MemberApi.pageUrl("frequencia", data.token)}">Ouvir frequência</a>
+          <a class="button" href="${MemberApi.pageUrl("frequencia", data.token)}">Ouvir frequencia</a>
           <a class="button secondary" href="${MemberApi.pageUrl("diagnostico", data.token)}">${diagnosticText}</a>
           <a class="button secondary" href="${MemberApi.pageUrl("progresso", data.token)}">Ver progresso</a>
           <a class="button secondary" href="${MemberApi.pageUrl("entrega", data.token)}">Baixar materiais</a>
-          <a class="button secondary" href="${MemberApi.pageUrl("bonus", data.token)}">Bônus secreto</a>
+          <a class="button secondary" href="${MemberApi.pageUrl("bonus", data.token)}">${bonusText}</a>
         </div>
       `;
     }
 
     async function boot() {
       if (!initialToken) {
-        loginForm();
+        MemberApi.showTokenLogin(content);
         return;
       }
 
@@ -79,6 +65,7 @@
         retry.innerHTML = '<button class="secondary" id="retryLogin">Tentar outro token</button>';
         content.appendChild(retry);
         document.querySelector("#retryLogin").addEventListener("click", () => {
+          localStorage.removeItem("frequenciaAccessToken");
           localStorage.removeItem("frequencia_access_token");
           window.location.href = "membros.html";
         });

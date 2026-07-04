@@ -8,8 +8,8 @@
 </head>
 <body>
   <main>
-    <h1>Seus materiais estão prontos</h1>
-    <p class="center">Baixe seus PDFs personalizados e acesse sua jornada de frequência.</p>
+    <h1>Seus materiais est&atilde;o prontos</h1>
+    <p class="center">Baixe seus PDFs personalizados e acesse sua jornada de frequencia.</p>
 
     <div id="content"></div>
   </main>
@@ -30,14 +30,15 @@
         <div class="actions">
           <a class="button" href="${downloadUrls.mapa || "#"}" ${downloadUrls.mapa ? "" : "aria-disabled=\"true\""}>Baixar Mapa Completo</a>
           <a class="button" href="${downloadUrls.leitura || "#"}" ${downloadUrls.leitura ? "" : "aria-disabled=\"true\""}>Baixar Leitura Personalizada</a>
-          <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar plataforma bônus vitalícia</a>
+          <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar plataforma bonus vitalicia</a>
+          ${MemberApi.backToPanelHtml(token)}
         </div>
       `;
     }
 
     async function boot() {
       if (!token) {
-        MemberApi.showError(content, new Error("Token nao encontrado."));
+        MemberApi.showTokenLogin(content);
         return;
       }
 
@@ -54,13 +55,14 @@
           </div>
           <div class="actions">
             <button id="generateButton">Gerar meus materiais agora</button>
+            ${MemberApi.backToPanelHtml(token)}
           </div>
         `;
 
         document.querySelector("#generateButton").addEventListener("click", async () => {
           const button = document.querySelector("#generateButton");
           button.disabled = true;
-          button.textContent = "Gerando...";
+          button.textContent = "Preparando seus dados...";
           try {
             await MemberApi.generateDelivery(token);
             const data = await MemberApi.delivery(token);

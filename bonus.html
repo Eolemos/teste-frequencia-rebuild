@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bônus secreto</title>
+  <title>Bonus secreto</title>
   <link rel="stylesheet" href="css/member-area.css" />
 </head>
 <body>
   <main>
-    <h1>Bônus secreto</h1>
-    <p class="center">Este conteúdo libera depois da conclusão dos 7 dias.</p>
+    <h1>Bonus secreto</h1>
+    <p class="center">Este conteudo libera depois da conclusao dos 7 dias.</p>
 
     <div id="content"></div>
   </main>
@@ -21,7 +21,7 @@
 
     async function boot() {
       if (!token) {
-        MemberApi.showError(content, new Error("Token nao encontrado."));
+        MemberApi.showTokenLogin(content);
         return;
       }
 
@@ -40,6 +40,7 @@
             <div class="actions">
               <a class="button" href="${MemberApi.pageUrl("frequencia", token)}">Continuar jornada</a>
               <a class="button secondary" href="${MemberApi.pageUrl("progresso", token)}">Ver progresso</a>
+              ${MemberApi.backToPanelHtml(token)}
             </div>
           `;
           return;
@@ -53,7 +54,7 @@
             ${data.unlockedAt ? `<p class="muted">Liberado em ${MemberApi.formatDate(data.unlockedAt)}</p>` : ""}
           </div>
           <div class="actions">
-            <a class="button" href="${MemberApi.pageUrl("membros", token)}">Voltar para membros</a>
+            ${MemberApi.backToPanelHtml(token)}
           </div>
         `;
       } catch (error) {

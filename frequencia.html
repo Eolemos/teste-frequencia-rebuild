@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sessão de frequência</title>
+  <title>Sessao de frequencia</title>
   <link rel="stylesheet" href="css/member-area.css" />
 </head>
 <body>
   <main>
-    <h1>Sessão de frequência</h1>
-    <p class="center">Sessão de frequência — 60 minutos</p>
+    <h1>Sessao de frequencia</h1>
+    <p class="center">Sessao de frequencia - 60 minutos</p>
 
     <div id="content"></div>
   </main>
@@ -41,6 +41,7 @@
       const lockedMessage = state.nextDayUnlockAt
         ? `<p class="muted">Proximo dia libera em ${MemberApi.formatDate(state.nextDayUnlockAt)}.</p>`
         : "";
+      const bonusLink = document.querySelector("#bonusLink");
 
       document.querySelector("#progressInfo").innerHTML = `
         <p><strong>Dia atual:</strong> ${currentDay} de 7</p>
@@ -50,8 +51,11 @@
         ${lockedMessage}
       `;
 
-      if (state.bonusUnlocked) {
-        document.querySelector("#bonusLink").hidden = false;
+      if (bonusLink) {
+        bonusLink.hidden = false;
+        bonusLink.textContent = state.bonusUnlocked
+          ? "Abrir bonus secreto"
+          : "Bonus secreto libera apos concluir 7 dias";
       }
     }
 
@@ -71,11 +75,11 @@
     function renderPlayer(data) {
       content.innerHTML = `
         <div class="panel center">
-          <span class="badge">Sessão de frequência — 60 minutos</span>
-          <p>Oi, <strong>${data.name || "Ana Clara"}</strong>. Coloque o áudio para tocar e mantenha a sessão ativa.</p>
+          <span class="badge">Sessao de frequencia - 60 minutos</span>
+          <p>Oi, <strong>${data.name || "Ana Clara"}</strong>. Coloque o audio para tocar e mantenha a sessao ativa.</p>
           <audio id="frequencyAudio" loop preload="auto"></audio>
           <div class="actions">
-            <button id="playButton">Iniciar sessão</button>
+            <button id="playButton">Iniciar sessao</button>
             <button id="pauseButton" class="secondary" disabled>Pausar</button>
           </div>
         </div>
@@ -85,7 +89,8 @@
 
         <div class="actions">
           <a class="button secondary" href="${MemberApi.pageUrl("progresso", token)}">Ver progresso completo</a>
-          <a id="bonusLink" class="button secondary" href="${MemberApi.pageUrl("bonus", token)}" hidden>Abrir bônus secreto</a>
+          <a id="bonusLink" class="button secondary" href="${MemberApi.pageUrl("bonus", token)}">Bonus secreto libera apos concluir 7 dias</a>
+          ${MemberApi.backToPanelHtml(token)}
         </div>
       `;
 
@@ -94,25 +99,36 @@
       renderState(data);
 
       document.querySelector("#playButton").addEventListener("click", async () => {
-        await audio.play();
-        document.querySelector("#playButton").disabled = true;
-        document.querySelector("#pauseButton").disabled = false;
-        await sendHeartbeat();
-        stopHeartbeat();
-        heartbeatTimer = window.setInterval(sendHeartbeat, 10000);
+        const playButton = document.querySelector("#playButton");
+        const pauseButton = document.querySelector("#pauseButton");
+        playButton.disabled = true;
+        playButton.textContent = "Carregando...";
+        try {
+          await audio.play();
+          playButton.textContent = "Sessao em andamento";
+          pauseButton.disabled = false;
+          await sendHeartbeat();
+          stopHeartbeat();
+          heartbeatTimer = window.setInterval(sendHeartbeat, 10000);
+        } catch (error) {
+          playButton.disabled = false;
+          playButton.textContent = "Iniciar sessao";
+          MemberApi.showError(document.querySelector("#message"), error);
+        }
       });
 
       document.querySelector("#pauseButton").addEventListener("click", () => {
         audio.pause();
         stopHeartbeat();
         document.querySelector("#playButton").disabled = false;
+        document.querySelector("#playButton").textContent = "Continuar sessao";
         document.querySelector("#pauseButton").disabled = true;
       });
     }
 
     async function boot() {
       if (!token) {
-        MemberApi.showError(content, new Error("Token nao encontrado."));
+        MemberApi.showTokenLogin(content);
         return;
       }
 

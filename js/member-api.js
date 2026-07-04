@@ -1,4 +1,6 @@
 (function () {
+  const TOKEN_KEY = "frequenciaAccessToken";
+  const LEGACY_TOKEN_KEY = "frequencia_access_token";
   const params = new URLSearchParams(window.location.search);
   const apiBaseFromUrl = params.get("apiBase") || "";
   if (apiBaseFromUrl) localStorage.setItem("frequencia_api_base", apiBaseFromUrl);
@@ -15,14 +17,21 @@
   }
 
   function getToken() {
-    const token = tokenFromUrl().trim() || localStorage.getItem("frequencia_access_token") || "";
-    if (token) localStorage.setItem("frequencia_access_token", token);
+    const token =
+      tokenFromUrl().trim() ||
+      localStorage.getItem(TOKEN_KEY) ||
+      localStorage.getItem(LEGACY_TOKEN_KEY) ||
+      "";
+    if (token) setToken(token);
     return token;
   }
 
   function setToken(token) {
     const cleanToken = String(token || "").trim();
-    if (cleanToken) localStorage.setItem("frequencia_access_token", cleanToken);
+    if (cleanToken) {
+      localStorage.setItem(TOKEN_KEY, cleanToken);
+      localStorage.setItem(LEGACY_TOKEN_KEY, cleanToken);
+    }
     return cleanToken;
   }
 
@@ -69,7 +78,35 @@
 
   function setLoading(target, text) {
     const element = typeof target === "string" ? document.querySelector(target) : target;
-    if (element) element.innerHTML = `<div class="panel"><p>${text || "Carregando..."}</p></div>`;
+    if (element) element.innerHTML = `<div class="panel"><p>${text || "Preparando seus dados..."}</p></div>`;
+  }
+
+  function showTokenLogin(target) {
+    const element = typeof target === "string" ? document.querySelector(target) : target;
+    if (!element) return;
+
+    element.innerHTML = `
+      <form id="tokenLoginForm" class="panel">
+        <label>
+          Cole seu token de acesso
+          <input name="token" autocomplete="one-time-code" required />
+        </label>
+        <button type="submit">Entrar</button>
+      </form>
+    `;
+
+    element.querySelector("#tokenLoginForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const button = event.currentTarget.querySelector("button");
+      button.disabled = true;
+      button.textContent = "Carregando...";
+      const token = setToken(event.currentTarget.elements.token.value);
+      window.location.href = pageUrl("membros", token);
+    });
+  }
+
+  function backToPanelHtml(token) {
+    return `<a class="button secondary" href="${pageUrl("membros", token || getToken())}">Voltar ao painel</a>`;
   }
 
   function formatDate(value) {
@@ -97,8 +134,10 @@
     getToken,
     setToken,
     pageUrl,
+    backToPanelHtml,
     showError,
     setLoading,
+    showTokenLogin,
     formatDate,
     secondsLabel,
     access: (token) => request(`/api/access/${encodeURIComponent(token)}`),
