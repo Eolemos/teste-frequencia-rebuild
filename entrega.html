@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
@@ -19,18 +19,134 @@
     const token = MemberApi.getToken();
     const content = document.querySelector("#content");
 
+    function cleanLabel(text) {
+      return String(text || "")
+        .replace(/_/g, " ")
+        .replace(/\.pdf$/i, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function labelFromKey(key) {
+      const labels = {
+        mapa: "Mapa Completo de Frequências Vibracionais",
+        leitura: "Guia Vibracional do Nome",
+        guia: "Guia Vibracional do Nome",
+        prosperidade: "Livro dos Caminhos de Luz e Prosperidade",
+        protecao: "Livro da Proteção Espiritual e Fortalecimento Interior",
+        proteção: "Livro da Proteção Espiritual e Fortalecimento Interior",
+        jornada: "Livro da Jornada Sagrada dos 7 Dias",
+        bonus: "Depois dos 7 Dias"
+      };
+
+      const k = String(key || "").toLowerCase();
+
+      if (labels[k]) return labels[k];
+      if (k.includes("mapa")) return labels.mapa;
+      if (k.includes("guia") || k.includes("leitura")) return labels.guia;
+      if (k.includes("prosperidade") || k.includes("caminhos")) return labels.prosperidade;
+      if (k.includes("protecao") || k.includes("proteção") || k.includes("fortalecimento")) return labels.protecao;
+      if (k.includes("jornada") || k.includes("7 dias")) return labels.jornada;
+      if (k.includes("bonus") || k.includes("bônus") || k.includes("depois")) return labels.bonus;
+
+      return cleanLabel(key) || "Material personalizado";
+    }
+
+    function normalizeMaterials(data) {
+      const result = [];
+      const seen = new Set();
+
+      function addItem(item, fallbackKey) {
+        if (!item) return;
+
+        let url = "";
+        let label = "";
+        let locked = false;
+        let unlockText = "";
+
+        if (typeof item === "string") {
+          url = item;
+          label = labelFromKey(fallbackKey || item);
+        } else {
+          url = item.url || item.href || item.downloadUrl || item.downloadURL || item.link || "";
+          label = item.label || item.title || item.name || item.filename || item.fileName || labelFromKey(fallbackKey || item.id || item.key);
+          locked = Boolean(item.locked || item.isLocked || item.available === false || item.unlocked === false);
+          unlockText = item.unlockText || item.lockedText || item.message || item.availableAtText || "";
+        }
+
+        if (!label) label = labelFromKey(fallbackKey || url);
+        const id = `${label}|${url}`;
+
+        if (seen.has(id)) return;
+        seen.add(id);
+
+        result.push({ label, url, locked, unlockText });
+      }
+
+      const arrays = [
+        data.materials,
+        data.files,
+        data.pdfs,
+        data.downloads,
+        data.deliveryFiles,
+        data.generatedFiles,
+        data.delivery && data.delivery.files,
+        data.delivery && data.delivery.pdfs,
+        data.delivery && data.delivery.downloads
+      ];
+
+      arrays.forEach((arr) => {
+        if (Array.isArray(arr)) arr.forEach((item) => addItem(item));
+      });
+
+      const downloadUrls = data.downloadUrls || data.downloadURLS || data.urls || {};
+      Object.keys(downloadUrls).forEach((key) => addItem(downloadUrls[key], key));
+
+      const bonus =
+        data.bonus ||
+        data.bonusPdf ||
+        data.bonusDownload ||
+        data.lockedBonus ||
+        data.afterSevenDaysBonus;
+
+      if (bonus) addItem(bonus, "bonus");
+
+      return result;
+    }
+
     function materialLinks(data) {
-      const downloadUrls = data.downloadUrls || {};
+      const materials = normalizeMaterials(data);
+
+      const fallback = `
+        <a class="button" href="${(data.downloadUrls || {}).mapa || "#"}" ${(data.downloadUrls || {}).mapa ? "" : "aria-disabled=\"true\""}>Baixar Mapa Completo de Frequências Vibracionais</a>
+        <a class="button" href="${(data.downloadUrls || {}).leitura || "#"}" ${(data.downloadUrls || {}).leitura ? "" : "aria-disabled=\"true\""}>Baixar Guia Vibracional do Nome</a>
+      `;
+
+      const buttons = materials.length
+        ? materials.map((item) => {
+            if (item.locked || !item.url) {
+              return `
+                <div class="panel center">
+                  <span class="badge">Bônus bloqueado</span>
+                  <p><strong>${item.label}</strong></p>
+                  <p class="muted">${item.unlockText || "Disponível após completar seus 7 dias de prática."}</p>
+                </div>
+              `;
+            }
+
+            return `<a class="button" href="${item.url}" target="_blank" rel="noopener">Baixar ${item.label}</a>`;
+          }).join("")
+        : fallback;
+
       return `
         <div class="panel center">
           <span class="badge">Entrega liberada</span>
-          <p>Oi, <strong>${data.name || "Ana Clara"}</strong>.</p>
+          <p>Oi, <strong>${data.name || "Gabriel"}</strong>.</p>
           <p class="muted">Seus materiais foram preparados com sucesso.</p>
         </div>
         <div class="actions">
-          <a class="button" href="${downloadUrls.mapa || "#"}" ${downloadUrls.mapa ? "" : "aria-disabled=\"true\""}>Baixar Mapa Completo</a>
-          <a class="button" href="${downloadUrls.leitura || "#"}" ${downloadUrls.leitura ? "" : "aria-disabled=\"true\""}>Baixar Leitura Personalizada</a>
-          <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar plataforma bonus vitalicia</a>
+          ${buttons}
+          <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar plataforma bônus vitalícia</a>
           ${MemberApi.backToPanelHtml(token)}
         </div>
       `;
@@ -78,3 +194,4 @@
   </script>
 </body>
 </html>
+
