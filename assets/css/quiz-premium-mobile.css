@@ -1,0 +1,623 @@
+﻿:root {
+  --gv-text-main: #253754;
+  --gv-text-strong: #182946;
+  --gv-text-deep: #13233d;
+  --gv-text-soft: #314866;
+
+  --gv-card-bg-a: rgba(255, 249, 230, 0.88);
+  --gv-card-bg-b: rgba(246, 231, 188, 0.80);
+  --gv-card-border: rgba(219, 176, 55, 0.95);
+  --gv-card-shadow: 0 14px 32px rgba(23, 35, 71, 0.16);
+
+  --gv-gold-strong: #b98a1e;
+}
+
+/* títulos soltos - SEM caixa */
+.gv-floating-title {
+  max-width: calc(100% - 24px) !important;
+  margin: 10px auto 14px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: var(--gv-text-deep) !important;
+  text-align: center !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.01em !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.88),
+    0 0 8px rgba(255,255,255,0.55),
+    0 0 18px rgba(255,255,255,0.28) !important;
+}
+
+/* título principal da primeira tela */
+.gv-hero-title {
+  font-weight: 900 !important;
+  color: #1b2e4c !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.92),
+    0 0 10px rgba(255,255,255,0.62),
+    0 0 22px rgba(255,255,255,0.28) !important;
+}
+
+/* subtítulos tipo "Selecione seu gênero..." */
+.gv-subtitle-strong {
+  max-width: calc(100% - 28px) !important;
+  margin: 8px auto 16px !important;
+  color: #213452 !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+  line-height: 1.24 !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.88),
+    0 0 8px rgba(255,255,255,0.52),
+    0 0 16px rgba(255,255,255,0.22) !important;
+}
+
+/* textos pequenos soltos */
+.gv-soft-readable {
+  color: #233653 !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.78),
+    0 0 8px rgba(255,255,255,0.28) !important;
+}
+
+/* destaque na parte de privacidade */
+.gv-info-polish {
+  color: #1f3150 !important;
+  font-weight: 800 !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.82),
+    0 0 8px rgba(255,255,255,0.24) !important;
+}
+
+/* linha estatística / explicativa pequena */
+.gv-bottom-readable {
+  color: #314866 !important;
+  font-weight: 700 !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.68),
+    0 0 7px rgba(255,255,255,0.18) !important;
+}
+
+/* grid dos botões premium */
+.gv-premium-choice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: min(100%, 560px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.gv-premium-choice {
+  min-height: 112px !important;
+  width: 100% !important;
+  padding: 18px 12px !important;
+  border-radius: 22px !important;
+  border: 1.5px solid var(--gv-card-border) !important;
+  background:
+    linear-gradient(180deg, var(--gv-card-bg-a) 0%, var(--gv-card-bg-b) 100%) !important;
+  color: var(--gv-text-strong) !important;
+  box-shadow:
+    var(--gv-card-shadow),
+    inset 0 1px 0 rgba(255,255,255,0.64) !important;
+  backdrop-filter: blur(11px) !important;
+  -webkit-backdrop-filter: blur(11px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  text-align: center !important;
+  font-weight: 850 !important;
+  letter-spacing: -0.01em !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease !important;
+}
+
+.gv-premium-choice:hover,
+.gv-premium-choice:focus,
+.gv-premium-choice:active {
+  transform: translateY(-2px) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 247, 216, 0.96) 0%, rgba(247, 222, 148, 0.90) 100%) !important;
+  box-shadow:
+    0 18px 36px rgba(23, 35, 71, 0.20),
+    inset 0 1px 0 rgba(255,255,255,0.68) !important;
+}
+
+.gv-premium-choice *,
+.gv-premium-choice span,
+.gv-premium-choice strong,
+.gv-premium-choice div {
+  color: var(--gv-text-strong) !important;
+  font-weight: 850 !important;
+}
+
+.gv-premium-choice svg,
+.gv-premium-choice i {
+  color: var(--gv-gold-strong) !important;
+  stroke: var(--gv-gold-strong) !important;
+  fill: none !important;
+  width: 26px !important;
+  height: 26px !important;
+  font-size: 26px !important;
+  margin-bottom: 2px !important;
+}
+
+/* botão voltar */
+.gv-back-button {
+  min-width: 158px !important;
+  padding: 13px 22px !important;
+  border-radius: 16px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #ee8c91 0%, #df6973 100%) !important;
+  color: #ffffff !important;
+  font-weight: 850 !important;
+  box-shadow: 0 12px 26px rgba(194, 82, 93, 0.24) !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+}
+
+.gv-back-button:hover,
+.gv-back-button:focus {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 15px 30px rgba(194, 82, 93, 0.30) !important;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .gv-floating-title {
+    max-width: calc(100% - 22px) !important;
+    margin: 8px auto 12px !important;
+    font-size: clamp(1.08rem, 4.9vw, 1.4rem) !important;
+  }
+
+  .gv-hero-title {
+    font-size: clamp(1.45rem, 6.8vw, 2.05rem) !important;
+    line-height: 1.18 !important;
+  }
+
+  .gv-subtitle-strong {
+    font-size: clamp(1rem, 4.3vw, 1.22rem) !important;
+  }
+
+  .gv-premium-choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 11px !important;
+    width: calc(100% - 22px) !important;
+  }
+
+  .gv-premium-choice {
+    min-height: 100px !important;
+    padding: 15px 8px !important;
+    border-radius: 18px !important;
+    font-size: 0.96rem !important;
+  }
+
+  .gv-premium-choice svg,
+  .gv-premium-choice i {
+    width: 23px !important;
+    height: 23px !important;
+    font-size: 23px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .gv-premium-choice-grid {
+    gap: 9px !important;
+    width: calc(100% - 18px) !important;
+  }
+
+  .gv-premium-choice {
+    min-height: 92px !important;
+    padding: 13px 7px !important;
+    border-radius: 16px !important;
+    font-size: 0.90rem !important;
+  }
+
+  .gv-back-button {
+    min-width: 138px !important;
+    padding: 12px 18px !important;
+  }
+}
+
+/* ===== Ajuste final local: leitura premium sobre background celestial ===== */
+:root {
+  --gv-cream: #fff8df;
+  --gv-blue: #10244a;
+  --gv-blue-deep: #10223f;
+  --gv-gold-line: rgba(207, 163, 45, 0.84);
+}
+
+#step1 h1,
+#step1 .gv-hero-title {
+  max-width: min(710px, calc(100% - 20px)) !important;
+  margin: 8px auto 18px !important;
+  padding: clamp(10px, 2.2vw, 16px) clamp(12px, 3vw, 24px) !important;
+  border: 1px solid rgba(255, 239, 184, 0.28) !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255, 248, 220, 0.70), rgba(255, 248, 220, 0.22) 52%, rgba(255, 248, 220, 0.08) 100%),
+    linear-gradient(90deg, rgba(17, 37, 78, 0.07), rgba(255, 249, 223, 0.36), rgba(17, 37, 78, 0.07)) !important;
+  color: var(--gv-blue-deep) !important;
+  font-weight: 900 !important;
+  font-size: clamp(1.52rem, 3.1vw, 2.18rem) !important;
+  line-height: 1.16 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.84), 0 0 14px rgba(255,255,255,0.34) !important;
+  box-shadow: 0 16px 42px rgba(9, 24, 57, 0.14), inset 0 1px 0 rgba(255,255,255,0.46) !important;
+  backdrop-filter: blur(7px) saturate(1.08) !important;
+  -webkit-backdrop-filter: blur(7px) saturate(1.08) !important;
+}
+
+#step1 .hl {
+  border-radius: 9px !important;
+  padding: 1px 9px 2px !important;
+  background: linear-gradient(180deg, #ffe187 0%, #f3bd35 100%) !important;
+  color: var(--gv-blue-deep) !important;
+  box-shadow: 0 6px 14px rgba(157, 109, 0, 0.18), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+}
+
+#step1 .subtitle,
+#step1 .gv-subtitle-strong {
+  max-width: min(520px, calc(100% - 28px)) !important;
+  margin: 10px auto 18px !important;
+  padding: 8px 18px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 239, 184, 0.28) !important;
+  background: linear-gradient(90deg, rgba(255, 248, 221, 0.14), rgba(255, 248, 221, 0.54), rgba(255, 248, 221, 0.14)) !important;
+  color: #132846 !important;
+  font-weight: 900 !important;
+  font-size: clamp(1rem, 2vw, 1.18rem) !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.82) !important;
+}
+
+#step1 .privacy,
+#step1 .counter {
+  border: 1px solid rgba(255, 239, 184, 0.26) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 232, 0.84), rgba(235, 225, 255, 0.36)),
+    rgba(255, 255, 255, 0.18) !important;
+  color: #172b4a !important;
+  box-shadow: 0 14px 30px rgba(8, 19, 48, 0.15), inset 0 1px 0 rgba(255,255,255,0.52) !important;
+  backdrop-filter: blur(9px) saturate(1.05) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.05) !important;
+}
+
+#step1 .privacy {
+  padding: 13px 15px !important;
+  gap: 12px !important;
+  font-size: clamp(0.92rem, 1.7vw, 1rem) !important;
+  line-height: 1.36 !important;
+}
+
+#step1 .privacy b,
+#step1 .counter b {
+  color: var(--gv-blue-deep) !important;
+  font-weight: 900 !important;
+}
+
+#step1 .lock {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(207, 163, 45, 0.52) !important;
+  background: linear-gradient(180deg, rgba(255, 243, 200, 0.88), rgba(238, 208, 124, 0.62)) !important;
+  color: #153052 !important;
+  font-weight: 900 !important;
+}
+
+#step1 .counter {
+  padding: 12px 16px !important;
+  text-align: center !important;
+  font-size: clamp(0.92rem, 1.7vw, 1rem) !important;
+  line-height: 1.38 !important;
+}
+
+#step6 .banner-title,
+#step7 .banner-title,
+.step-title,
+.step8-title {
+  max-width: min(560px, calc(100% - 20px)) !important;
+  border: 1px solid rgba(255, 239, 184, 0.28) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(90deg, rgba(16, 36, 74, 0.72), rgba(255, 248, 221, 0.42), rgba(16, 36, 74, 0.72)) !important;
+  color: var(--gv-cream) !important;
+  box-shadow: 0 16px 34px rgba(8, 19, 48, 0.18) !important;
+  text-shadow: 0 2px 10px rgba(8, 19, 48, 0.42) !important;
+  font-weight: 900 !important;
+  line-height: 1.22 !important;
+}
+
+#step6 .banner-title,
+#step7 .banner-title {
+  padding: 13px 18px !important;
+  letter-spacing: 0 !important;
+  font-size: clamp(1rem, 2.4vw, 1.2rem) !important;
+}
+
+#step6 .civil-grid,
+#step7 .challenge-grid {
+  width: min(560px, 100%) !important;
+  gap: 14px !important;
+}
+
+#step6 .civil-btn,
+#step7 .challenge-btn {
+  min-height: 112px !important;
+  height: auto !important;
+  padding: 18px 14px !important;
+  border-radius: 18px !important;
+  border: 1.5px solid var(--gv-gold-line) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.74), transparent 52%),
+    linear-gradient(180deg, rgba(255, 250, 232, 0.94), rgba(248, 232, 186, 0.88)) !important;
+  color: #132846 !important;
+  box-shadow: 0 18px 40px rgba(8, 19, 48, 0.20), inset 0 1px 0 rgba(255,255,255,0.64) !important;
+  backdrop-filter: blur(9px) saturate(1.06) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(1.06) !important;
+}
+
+#step6 .civil-btn:hover,
+#step6 .civil-btn:focus,
+#step7 .challenge-btn:hover,
+#step7 .challenge-btn:focus {
+  transform: translateY(-2px) !important;
+  border-color: rgba(194, 145, 24, 0.96) !important;
+  box-shadow: 0 23px 46px rgba(8, 19, 48, 0.25), inset 0 1px 0 rgba(255,255,255,0.7) !important;
+}
+
+#step6 .civil-label,
+#step7 .challenge-label {
+  color: var(--gv-blue-deep) !important;
+  font-size: clamp(0.96rem, 2.2vw, 1.08rem) !important;
+  font-weight: 900 !important;
+  line-height: 1.18 !important;
+  text-shadow: none !important;
+}
+
+#step6 .civil-ico,
+#step7 .challenge-ico {
+  width: 32px !important;
+  height: 32px !important;
+  filter: drop-shadow(0 4px 8px rgba(145, 101, 0, 0.16)) !important;
+}
+
+#step6 .civil-ico path,
+#step7 .challenge-ico path {
+  stroke: #b98a1e !important;
+}
+
+@media (max-width: 700px) {
+  #step1 h1,
+  #step1 .gv-hero-title {
+    font-size: clamp(1.35rem, 6vw, 1.82rem) !important;
+    line-height: 1.16 !important;
+  }
+
+  #step1 .privacy {
+    width: min(420px, calc(100% - 18px)) !important;
+    padding: 14px !important;
+    grid-template-columns: 42px 1fr !important;
+    row-gap: 4px !important;
+  }
+
+  #step1 .counter {
+    width: min(420px, calc(100% - 18px)) !important;
+    padding: 12px 14px !important;
+  }
+
+  #step6 .civil-grid,
+  #step7 .challenge-grid {
+    width: min(420px, calc(100% - 18px)) !important;
+    gap: 11px !important;
+  }
+
+  #step6 .civil-btn,
+  #step7 .challenge-btn {
+    min-height: 104px !important;
+    padding: 16px 9px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #step1 h1,
+  #step1 .gv-hero-title {
+    padding: 10px 11px !important;
+  }
+
+  #step6 .civil-grid,
+  #step7 .challenge-grid {
+    gap: 9px !important;
+  }
+
+  #step6 .civil-btn,
+  #step7 .challenge-btn {
+    min-height: 98px !important;
+    padding: 14px 7px !important;
+  }
+}
+
+
+
+
+
+
+/* === DATE BUTTON REPAIR START === */
+
+/*
+  Reparo pedido:
+  - Cada botão de mês/dia/década/ano com background separado.
+  - Títulos internos em faixa azul como antes.
+  - Botão voltar restaurado.
+  - Não mexe na tela principal.
+  - Não mexe nos cards premium de estado civil/desafio.
+*/
+
+section.step:not(#step1) .gv-inner-title-pill {
+  width: fit-content !important;
+  max-width: calc(100% - 28px) !important;
+  margin: 12px auto 18px !important;
+  padding: 7px 18px !important;
+
+  display: block !important;
+  text-align: center !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+
+  font-weight: 900 !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.01em !important;
+
+  background: linear-gradient(90deg, #233653 0%, #1d304d 50%, #233653 100%) !important;
+  border: none !important;
+  border-radius: 999px !important;
+
+  box-shadow: 0 8px 18px rgba(8, 18, 38, 0.20) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.24) !important;
+
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+section.step:not(#step1) .gv-inner-title-pill *,
+section.step:not(#step1) .gv-inner-title-pill span,
+section.step:not(#step1) .gv-inner-title-pill strong {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.24) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Botões de mês/dia/década/ano */
+section.step:not(#step1) button.gv-date-option,
+section.step:not(#step1) a.gv-date-option,
+section.step:not(#step1) [role="button"].gv-date-option {
+  position: relative !important;
+  overflow: hidden !important;
+
+  min-height: 52px !important;
+  padding: 12px 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: rgba(255, 255, 255, 0.94) !important;
+  background-image: none !important;
+
+  border: none !important;
+  border-radius: 8px !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+  line-height: 1.1 !important;
+
+  box-shadow:
+    0 8px 18px rgba(15, 25, 45, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.82) !important;
+
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+section.step:not(#step1) button.gv-date-option::after,
+section.step:not(#step1) a.gv-date-option::after,
+section.step:not(#step1) [role="button"].gv-date-option::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: 0 !important;
+  height: 3px !important;
+  background: #f2c744 !important;
+  border-radius: 999px 999px 0 0 !important;
+}
+
+section.step:not(#step1) button.gv-date-option *,
+section.step:not(#step1) a.gv-date-option *,
+section.step:not(#step1) [role="button"].gv-date-option * {
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+
+/* Botão voltar restaurado */
+section.step:not(#step1) button.gv-back-restore,
+section.step:not(#step1) a.gv-back-restore,
+section.step:not(#step1) [role="button"].gv-back-restore {
+  min-width: 150px !important;
+  min-height: 44px !important;
+  padding: 12px 22px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #ef707b !important;
+  background-image: linear-gradient(135deg, #f07d86 0%, #e76672 100%) !important;
+
+  border: none !important;
+  border-radius: 14px !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+
+  box-shadow: 0 10px 22px rgba(170, 62, 72, 0.22) !important;
+  text-shadow: none !important;
+}
+
+section.step:not(#step1) button.gv-back-restore *,
+section.step:not(#step1) a.gv-back-restore *,
+section.step:not(#step1) [role="button"].gv-back-restore * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  section.step:not(#step1) .gv-inner-title-pill {
+    max-width: calc(100% - 24px) !important;
+    margin: 10px auto 14px !important;
+    padding: 6px 14px !important;
+    font-size: clamp(0.95rem, 4vw, 1.12rem) !important;
+  }
+
+  section.step:not(#step1) button.gv-date-option,
+  section.step:not(#step1) a.gv-date-option,
+  section.step:not(#step1) [role="button"].gv-date-option {
+    min-height: 50px !important;
+    padding: 10px 10px !important;
+    font-size: 0.95rem !important;
+  }
+
+  section.step:not(#step1) button.gv-back-restore,
+  section.step:not(#step1) a.gv-back-restore,
+  section.step:not(#step1) [role="button"].gv-back-restore {
+    min-width: 132px !important;
+    min-height: 42px !important;
+    padding: 11px 18px !important;
+  }
+}
+
+/* === DATE BUTTON REPAIR END === */
