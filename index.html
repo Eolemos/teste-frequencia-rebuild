@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Leitura de Frequência</title>
+  <link rel="preload" as="image" href="assets/img/background-guia-vibracional-mobile.webp" type="image/webp" media="(max-width: 768px)">
+  <link rel="preload" as="image" href="assets/img/background-guia-vibracional.webp" type="image/webp" media="(min-width: 769px)">
 
   <style>
     :root{
@@ -136,6 +138,11 @@
       aspect-ratio: 4 / 5;
       background: #111827;
       overflow:hidden;
+    }
+    .card .img picture{
+      width:100%;
+      height:100%;
+      display:block;
     }
     .card .img img{
       width:100%;
@@ -1285,7 +1292,7 @@
 }
 
   </style>
-  <link rel="stylesheet" href="assets/css/background-premium.css?v=20260705">
+  <link rel="stylesheet" href="assets/css/background-premium.css?v=20260705204130">
   <link rel="stylesheet" href="assets/css/quiz-premium-mobile.css?v=20260705202703">
   <link rel="stylesheet" href="assets/css/quiz-final-step-clean.css?v=20260705202949">
   <link rel="stylesheet" href="assets/css/quiz-force-clean.css?v=20260705203224">
@@ -1312,14 +1319,20 @@
         <div class="cards">
           <div class="card" role="button" tabindex="0" data-g="F">
             <div class="img">
-              <img src="img/female.a214dfbb.png" alt="Mulher">
+              <picture>
+                <source srcset="img/female.a214dfbb.webp" type="image/webp">
+                <img src="img/female.a214dfbb.png" alt="Mulher" width="720" height="1080" decoding="async" fetchpriority="high">
+              </picture>
             </div>
             <div class="cta"><span class="arrow">&gt;</span> Mulher</div>
           </div>
 
           <div class="card" role="button" tabindex="0" data-g="M">
             <div class="img">
-              <img src="img/masculine.b27a3766.png" alt="Homem">
+              <picture>
+                <source srcset="img/masculine.b27a3766.webp" type="image/webp">
+                <img src="img/masculine.b27a3766.png" alt="Homem" width="720" height="1080" decoding="async" fetchpriority="high">
+              </picture>
             </div>
             <div class="cta"><span class="arrow">&gt;</span> Homem</div>
           </div>
@@ -1583,7 +1596,7 @@
         <span class="name" id="nameInline">a</span>, sua leitura vai sair do ar em breve.
       </div>
 
-      <img class="stop-img" src="img/stop.f3d2a697.png" alt="Pare" />
+      <img class="stop-img" src="img/stop.f3d2a697.png" alt="Pare" loading="lazy" decoding="async" />
 
       <div class="modal-text">
         Essa é a sua última chance de assistir até o final.<br>
@@ -1606,7 +1619,7 @@
         <!-- area das imagens -->
         <div class="fx-images" data-layout="old-native">
           <div id="fxIntroTitle" class="fx-intro-title"></div>
-          <img id="fxImg" class="fx-img" src="assets/imgs/frequencia.png" data-src="assets/imgs/frequencia.png" alt="">
+          <img id="fxImg" class="fx-img" src="assets/imgs/frequencia.png" data-src="assets/imgs/frequencia.png" alt="" loading="lazy" decoding="async">
         </div>
 
         <!-- legenda/texto (se você tiver VTT depois, pluga) -->
@@ -1647,7 +1660,7 @@
     </div>
 
     <!-- áudio -->
-<audio id="fxAudio" preload="auto" playsinline>
+<audio id="fxAudio" preload="none" playsinline>
   <source id="fxAudioSource" src="captions/h_40_s.mp3" data-src="captions/h_40_s.mp3" type="audio/mpeg" />
   <track id="fxTrack" kind="subtitles" srclang="pt-BR" label="Português" src="captions/h_40_s.vtt" default>
 </audio>
@@ -30912,7 +30925,6 @@ function bindVttToFxText(audioEl){
 </script>
 
 <script src="js/checkout-override.js"></script>
-  <script defer src="assets/js/quiz-premium-mobile.js?v=20260705195953"></script>
   <script defer src="assets/js/quiz-repair-date-buttons.js?v=20260705202703"></script>
   <script defer src="assets/js/quiz-final-step-clean.js?v=20260705202949"></script>
   <script defer src="assets/js/quiz-force-clean.js?v=20260705203224"></script>

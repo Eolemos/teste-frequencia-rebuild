@@ -11,7 +11,10 @@ body {
       rgba(255, 246, 220, 0.05) 56%,
       rgba(12, 30, 70, 0.42) 100%
     ),
-    url("../img/background-guia-vibracional.png");
+    image-set(
+      url("../img/background-guia-vibracional.webp") type("image/webp"),
+      url("../img/background-guia-vibracional.png") type("image/png")
+    );
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -38,6 +41,18 @@ body > * {
   body {
     background-attachment: scroll;
     background-position: center top;
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(7, 18, 48, 0.55) 0%,
+        rgba(7, 18, 48, 0.22) 38%,
+        rgba(255, 246, 220, 0.05) 56%,
+        rgba(12, 30, 70, 0.42) 100%
+      ),
+      image-set(
+        url("../img/background-guia-vibracional-mobile.webp") type("image/webp"),
+        url("../img/background-guia-vibracional.png") type("image/png")
+      );
   }
 
   body::before {
