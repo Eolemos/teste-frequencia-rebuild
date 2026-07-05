@@ -1,0 +1,272 @@
+﻿/* =========================================================
+   FORCAR LIMPEZA DO QUIZ - SOMENTE LOCAL
+   Pedido:
+   - Sem bolha azul.
+   - Sem fundo nos titulos.
+   - Texto preto.
+   - Botoes continuam com fundo individual.
+   - Nao mexe no step1 / tela principal.
+========================================================= */
+
+/* remove qualquer fundo/painel/oval aplicado nos steps internos */
+body section.step:not(#step1),
+body section.step:not(#step1).step-active,
+body section.step:not(#step1).is-active,
+body section.step:not(#step1).active {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* remove fundo de wrappers grandes, mas NAO dos botoes */
+body section.step:not(#step1) .gv-remove-blue-panel,
+body section.step:not(#step1) .gv-remove-blue-panel *:not(button):not(a):not(input):not(textarea):not(select) {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* titulo interno SEM FUNDO e PRETO */
+body section.step:not(#step1) .gv-clean-title,
+body section.step:not(#step1) .gv-clean-title.gv-inner-title-pill,
+body section.step:not(#step1) .gv-clean-title.gv-floating-title,
+body section.step:not(#step1) .gv-clean-title.gv-ax-question,
+body section.step:not(#step1) .gv-clean-title.gv-top-text-plain,
+body section.step:not(#step1) .gv-clean-title.gv-final-title-black {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  padding: 0 !important;
+  margin: 12px auto 18px !important;
+  max-width: calc(100% - 24px) !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.01em !important;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.95),
+    0 0 5px rgba(255,255,255,0.85),
+    0 0 12px rgba(255,255,255,0.55) !important;
+}
+
+body section.step:not(#step1) .gv-clean-title *,
+body section.step:not(#step1) .gv-clean-title span,
+body section.step:not(#step1) .gv-clean-title strong {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+  font-weight: 900 !important;
+}
+
+/* botoes individuais: mes, dia, decada, ano */
+body section.step:not(#step1) .gv-clean-date-btn {
+  position: relative !important;
+  overflow: hidden !important;
+
+  min-height: 52px !important;
+  padding: 12px 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: rgba(255,255,255,0.96) !important;
+  background-color: rgba(255,255,255,0.96) !important;
+  background-image: none !important;
+
+  border: none !important;
+  border-radius: 8px !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+  line-height: 1.1 !important;
+  text-shadow: none !important;
+
+  box-shadow:
+    0 8px 18px rgba(15,25,45,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.85) !important;
+}
+
+body section.step:not(#step1) .gv-clean-date-btn::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: 0 !important;
+  height: 3px !important;
+  background: #f2c744 !important;
+  border-radius: 999px 999px 0 0 !important;
+}
+
+/* botoes individuais: estado civil / desafio */
+body section.step:not(#step1) .gv-clean-choice-btn {
+  position: relative !important;
+  overflow: hidden !important;
+
+  min-height: 78px !important;
+  padding: 13px 10px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+
+  background: rgba(255,255,255,0.96) !important;
+  background-color: rgba(255,255,255,0.96) !important;
+  background-image: none !important;
+
+  border: none !important;
+  border-radius: 8px !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+  line-height: 1.12 !important;
+  text-shadow: none !important;
+
+  box-shadow:
+    0 8px 18px rgba(15,25,45,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.85) !important;
+}
+
+body section.step:not(#step1) .gv-clean-choice-btn::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: 0 !important;
+  height: 3px !important;
+  background: #f2c744 !important;
+  border-radius: 999px 999px 0 0 !important;
+}
+
+body section.step:not(#step1) .gv-clean-choice-btn *,
+body section.step:not(#step1) .gv-clean-date-btn * {
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+
+body section.step:not(#step1) .gv-clean-choice-btn svg,
+body section.step:not(#step1) .gv-clean-choice-btn i {
+  color: #b98a1e !important;
+  stroke: #b98a1e !important;
+  fill: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 22px !important;
+}
+
+/* grids transparentes */
+body section.step:not(#step1) .gv-clean-grid {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+
+  display: grid !important;
+  gap: 12px !important;
+}
+
+/* voltar rosa */
+body section.step:not(#step1) .gv-clean-back {
+  min-width: 132px !important;
+  min-height: 42px !important;
+  padding: 11px 18px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #ef707b !important;
+  background-image: linear-gradient(135deg, #f07d86 0%, #e76672 100%) !important;
+
+  border: none !important;
+  border-radius: 14px !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+  text-shadow: none !important;
+
+  box-shadow: 0 10px 22px rgba(170,62,72,0.22) !important;
+}
+
+/* input e continuar */
+body section.step:not(#step1) input {
+  background: rgba(255,255,255,0.96) !important;
+  background-color: rgba(255,255,255,0.96) !important;
+  background-image: none !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+body section.step:not(#step1) .gv-clean-continue {
+  background: #07960a !important;
+  background-image: linear-gradient(135deg, #0aa30d 0%, #078a09 100%) !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+
+  border: none !important;
+  border-radius: 999px !important;
+
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  body section.step:not(#step1) .gv-clean-title {
+    max-width: calc(100% - 22px) !important;
+    margin: 10px auto 16px !important;
+    font-size: clamp(1rem, 4.5vw, 1.18rem) !important;
+  }
+
+  body section.step:not(#step1) .gv-clean-date-btn {
+    min-height: 50px !important;
+    padding: 10px 10px !important;
+    font-size: 0.95rem !important;
+  }
+
+  body section.step:not(#step1) .gv-clean-choice-btn {
+    min-height: 76px !important;
+    padding: 12px 8px !important;
+    font-size: 0.94rem !important;
+  }
+}

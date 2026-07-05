@@ -1,0 +1,305 @@
+﻿/* =========================================================
+   CORREÇÃO LOCAL FINAL - STEP 6 / STEP 7 / STEP 8
+   Pedido:
+   - Tirar bolha/background azul dessas telas.
+   - Deixar texto preto/escuro.
+   - Cada botão com seu card separado.
+   - Não mexer na primeira tela.
+   - Não mexer nas telas de mês/dia/década/ano.
+========================================================= */
+
+/* limpa a bolha azul que pegou as telas finais */
+body section.step:is(#step6, #step7, #step8),
+body section.step:is(#step6, #step7, #step8).step-active {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* limpa wrappers internos que receberam oval/card azul */
+body section.step:is(#step6, #step7, #step8) > div,
+body section.step:is(#step6, #step7, #step8) form,
+body section.step:is(#step6, #step7, #step8) .gv-premium-choice-grid,
+body section.step:is(#step6, #step7, #step8) .gv-final-clean-wrap,
+body section.step:is(#step6, #step7, #step8) [class*="question"],
+body section.step:is(#step6, #step7, #step8) [class*="content"],
+body section.step:is(#step6, #step7, #step8) [class*="box"]:not(.gv-final-option-card),
+body section.step:is(#step6, #step7, #step8) [class*="card"]:not(.gv-final-option-card) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* títulos dessas telas: preto, sem faixa, sem bolha */
+body section.step:is(#step6, #step7, #step8) .gv-final-title-black,
+body section.step:is(#step6, #step7, #step8) .gv-final-title-black.gv-inner-title-pill,
+body section.step:is(#step6, #step7, #step8) .gv-final-title-black.gv-floating-title,
+body section.step:is(#step6, #step7, #step8) .gv-final-title-black.gv-ax-question {
+  display: block !important;
+  width: auto !important;
+  max-width: calc(100% - 26px) !important;
+  margin: 12px auto 18px !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.01em !important;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.95),
+    0 0 5px rgba(255,255,255,0.82),
+    0 0 12px rgba(255,255,255,0.55) !important;
+}
+
+body section.step:is(#step6, #step7, #step8) .gv-final-title-black *,
+body section.step:is(#step6, #step7, #step8) .gv-final-title-black span,
+body section.step:is(#step6, #step7, #step8) .gv-final-title-black strong {
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+  font-weight: 900 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* grid dos botões finais */
+body section.step:is(#step6, #step7) .gv-final-options-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  width: min(100%, 380px) !important;
+  margin: 0 auto 18px !important;
+
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* cards individuais estado civil/desafio */
+body section.step:is(#step6, #step7) .gv-final-option-card {
+  position: relative !important;
+  overflow: hidden !important;
+
+  min-height: 78px !important;
+  width: 100% !important;
+  padding: 13px 10px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+
+  background: rgba(255, 255, 255, 0.94) !important;
+  background-image: none !important;
+
+  border: none !important;
+  border-radius: 8px !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+  line-height: 1.12 !important;
+
+  box-shadow:
+    0 8px 18px rgba(15, 25, 45, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.82) !important;
+
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body section.step:is(#step6, #step7) .gv-final-option-card::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 10px !important;
+  right: 10px !important;
+  bottom: 0 !important;
+  height: 3px !important;
+  background: #f2c744 !important;
+  border-radius: 999px 999px 0 0 !important;
+}
+
+body section.step:is(#step6, #step7) .gv-final-option-card *,
+body section.step:is(#step6, #step7) .gv-final-option-card span,
+body section.step:is(#step6, #step7) .gv-final-option-card strong,
+body section.step:is(#step6, #step7) .gv-final-option-card div {
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
+
+body section.step:is(#step6, #step7) .gv-final-option-card svg,
+body section.step:is(#step6, #step7) .gv-final-option-card i {
+  color: #b98a1e !important;
+  stroke: #b98a1e !important;
+  fill: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 22px !important;
+}
+
+/* tela do nome */
+body section.step#step8 .gv-final-name-input,
+body section.step#step8 input[type="text"],
+body section.step#step8 input[type="name"] {
+  width: min(100%, 360px) !important;
+  min-height: 52px !important;
+  margin: 0 auto 18px !important;
+  padding: 0 16px !important;
+
+  display: block !important;
+
+  background: rgba(255,255,255,0.96) !important;
+  border: none !important;
+  border-radius: 8px !important;
+
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
+
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+
+  box-shadow:
+    0 8px 18px rgba(15, 25, 45, 0.10),
+    inset 0 1px 0 rgba(255,255,255,0.82) !important;
+}
+
+/* botão continuar segue verde, mas separado da bolha */
+body section.step#step8 .gv-final-continue {
+  width: min(100%, 360px) !important;
+  min-height: 54px !important;
+  margin: 0 auto 22px !important;
+  padding: 13px 18px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #07960a !important;
+  background-image: linear-gradient(135deg, #0aa30d 0%, #078a09 100%) !important;
+
+  border: none !important;
+  border-radius: 999px !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+
+  box-shadow: 0 12px 24px rgba(6, 122, 8, 0.22) !important;
+  text-shadow: none !important;
+}
+
+/* botão voltar rosa nas telas finais */
+body section.step:is(#step6, #step7, #step8) .gv-final-back {
+  min-width: 150px !important;
+  min-height: 44px !important;
+  padding: 12px 22px !important;
+  margin: 4px auto 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: #ef707b !important;
+  background-image: linear-gradient(135deg, #f07d86 0%, #e76672 100%) !important;
+
+  border: none !important;
+  border-radius: 14px !important;
+
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+
+  font-weight: 900 !important;
+  text-align: center !important;
+
+  box-shadow: 0 10px 22px rgba(170, 62, 72, 0.22) !important;
+  text-shadow: none !important;
+}
+
+body section.step:is(#step6, #step7, #step8) .gv-final-back *,
+body section.step#step8 .gv-final-continue * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  body section.step:is(#step6, #step7, #step8) .gv-final-title-black {
+    max-width: calc(100% - 22px) !important;
+    margin: 10px auto 16px !important;
+    font-size: clamp(1rem, 4.5vw, 1.18rem) !important;
+  }
+
+  body section.step:is(#step6, #step7) .gv-final-options-grid {
+    width: calc(100% - 44px) !important;
+    gap: 12px !important;
+  }
+
+  body section.step:is(#step6, #step7) .gv-final-option-card {
+    min-height: 76px !important;
+    padding: 12px 8px !important;
+    font-size: 0.94rem !important;
+  }
+
+  body section.step:is(#step6, #step7) .gv-final-option-card svg,
+  body section.step:is(#step6, #step7) .gv-final-option-card i {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 20px !important;
+  }
+
+  body section.step#step8 .gv-final-name-input,
+  body section.step#step8 input[type="text"],
+  body section.step#step8 input[type="name"],
+  body section.step#step8 .gv-final-continue {
+    width: calc(100% - 44px) !important;
+  }
+
+  body section.step:is(#step6, #step7, #step8) .gv-final-back {
+    min-width: 132px !important;
+    min-height: 42px !important;
+    padding: 11px 18px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  body section.step:is(#step6, #step7) .gv-final-options-grid {
+    width: calc(100% - 32px) !important;
+    gap: 10px !important;
+  }
+
+  body section.step:is(#step6, #step7) .gv-final-option-card {
+    min-height: 72px !important;
+    font-size: 0.88rem !important;
+  }
+}
