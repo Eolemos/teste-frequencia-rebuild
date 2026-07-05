@@ -114,29 +114,200 @@
       return result;
     }
 
+    function normalizeText(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/_/g, " ")
+        .replace(/\.pdf$/i, "")
+        .replace(/\s+/g, " ")
+        .toLowerCase()
+        .trim();
+    }
+
+    function labelFromKey(key) {
+      const text = normalizeText(key);
+
+      if (text.includes("mapa")) {
+        return "Mapa Completo de Frequências Vibracionais";
+      }
+
+      if (text.includes("guia") || text.includes("leitura") || text.includes("nome")) {
+        return "Guia Vibracional do Nome";
+      }
+
+      if (text.includes("caminhos") || text.includes("prosperidade")) {
+        return "Livro dos Caminhos de Luz e Prosperidade";
+      }
+
+      if (text.includes("protecao") || text.includes("fortalecimento")) {
+        return "Livro da Proteção Espiritual e Fortalecimento Interior";
+      }
+
+      if (text.includes("jornada") || text.includes("sagrada")) {
+        return "Livro da Jornada Sagrada dos 7 Dias";
+      }
+
+      if (text.includes("bonus") || text.includes("depois")) {
+        return "Depois dos 7 Dias";
+      }
+
+      return String(key || "Material personalizado")
+        .replace(/_/g, " ")
+        .replace(/\.pdf$/i, "")
+        .trim();
+    }
+
+    function collectMaterials(data) {
+      const list = [];
+
+      function add(item, fallbackKey) {
+        if (!item) return;
+
+        if (typeof item === "string") {
+          list.push({
+            key: fallbackKey || item,
+            label: labelFromKey(fallbackKey || item),
+            url: item,
+            locked: false,
+            isBonus: normalizeText(fallbackKey || item).includes("bonus")
+          });
+          return;
+        }
+
+        const key = item.key || item.id || item.type || fallbackKey || item.filename || item.fileName || item.name || item.title || "";
+        const label = item.label || item.title || item.name || item.filename || item.fileName || labelFromKey(key);
+        const url = item.url || item.href || item.downloadUrl || item.downloadURL || item.link || "";
+        const locked = Boolean(item.locked || item.isLocked || item.available === false || item.unlocked === false);
+        const isBonus = Boolean(item.isBonus || item.bonus || normalizeText(key + " " + label).includes("bonus") || normalizeText(key + " " + label).includes("depois dos 7 dias"));
+
+        list.push({
+          key,
+          label,
+          url,
+          locked,
+          isBonus,
+          unlockText: item.unlockText || item.lockedText || item.message || item.availableAtText || ""
+        });
+      }
+
+      const downloadUrls = data.downloadUrls || data.downloadURLS || data.urls || {};
+      Object.keys(downloadUrls).forEach((key) => add(downloadUrls[key], key));
+
+      const arrays = [
+        data.materials,
+        data.files,
+        data.pdfs,
+        data.downloads,
+        data.deliveryFiles,
+        data.generatedFiles,
+        data.delivery && data.delivery.files,
+        data.delivery && data.delivery.pdfs,
+        data.delivery && data.delivery.downloads
+      ];
+
+      arrays.forEach((arr) => {
+        if (Array.isArray(arr)) arr.forEach((item) => add(item));
+      });
+
+      const bonus =
+        data.bonus ||
+        data.bonusPdf ||
+        data.bonusDownload ||
+        data.lockedBonus ||
+        data.afterSevenDaysBonus;
+
+      if (bonus) add(bonus, "bonus");
+
+      return list;
+    }
+
+    function findMaterial(materials, terms, usedUrls) {
+      let best = null;
+      let bestScore = 0;
+
+      materials.forEach((item) => {
+        const haystack = normalizeText([
+          item.key,
+          item.label,
+          item.url
+        ].join(" "));
+
+        let score = 0;
+        terms.forEach((term) => {
+          if (haystack.includes(normalizeText(term))) score++;
+        });
+
+        if (item.url && usedUrls.has(item.url)) score = 0;
+
+        if (score > bestScore) {
+          best = item;
+          bestScore = score;
+        }
+      });
+
+      return bestScore > 0 ? best : null;
+    }
+
+    function renderDownloadButton(item, label) {
+      if (!item || !item.url) {
+        return `
+          <div class="panel center">
+            <span class="badge">Material em preparação</span>
+            <p><strong>${label}</strong></p>
+            <p class="muted">Este arquivo ainda não veio do servidor. Gere novamente a entrega ou aguarde alguns instantes.</p>
+          </div>
+        `;
+      }
+
+      if (item.locked) {
+        return `
+          <div class="panel center">
+            <span class="badge">Bônus bloqueado</span>
+            <p><strong>${label}</strong></p>
+            <p class="muted">${item.unlockText || "Disponível após completar seus 7 dias de prática."}</p>
+          </div>
+        `;
+      }
+
+      return `<a class="button" href="${item.url}" target="_blank" rel="noopener">Baixar ${label}</a>`;
+    }
+
     function materialLinks(data) {
-      const materials = normalizeMaterials(data);
+      const materials = collectMaterials(data);
+      const usedUrls = new Set();
 
-      const fallback = `
-        <a class="button" href="${(data.downloadUrls || {}).mapa || "#"}" ${(data.downloadUrls || {}).mapa ? "" : "aria-disabled=\"true\""}>Baixar Mapa Completo de Frequências Vibracionais</a>
-        <a class="button" href="${(data.downloadUrls || {}).leitura || "#"}" ${(data.downloadUrls || {}).leitura ? "" : "aria-disabled=\"true\""}>Baixar Guia Vibracional do Nome</a>
-      `;
+      const expectedBooks = [
+        {
+          label: "Mapa Completo de Frequências Vibracionais",
+          terms: ["mapa", "frequencias", "vibracionais"]
+        },
+        {
+          label: "Guia Vibracional do Nome",
+          terms: ["guia", "leitura", "nome"]
+        },
+        {
+          label: "Livro dos Caminhos de Luz e Prosperidade",
+          terms: ["caminhos", "luz", "prosperidade"]
+        },
+        {
+          label: "Livro da Proteção Espiritual e Fortalecimento Interior",
+          terms: ["protecao", "espiritual", "fortalecimento", "interior"]
+        },
+        {
+          label: "Livro da Jornada Sagrada dos 7 Dias",
+          terms: ["jornada", "sagrada", "7 dias"]
+        }
+      ];
 
-      const buttons = materials.length
-        ? materials.map((item) => {
-            if (item.locked || !item.url) {
-              return `
-                <div class="panel center">
-                  <span class="badge">Bônus bloqueado</span>
-                  <p><strong>${item.label}</strong></p>
-                  <p class="muted">${item.unlockText || "Disponível após completar seus 7 dias de prática."}</p>
-                </div>
-              `;
-            }
+      const buttons = expectedBooks.map((book) => {
+        const item = findMaterial(materials, book.terms, usedUrls);
+        if (item && item.url) usedUrls.add(item.url);
+        return renderDownloadButton(item, book.label);
+      }).join("");
 
-            return `<a class="button" href="${item.url}" target="_blank" rel="noopener">Baixar ${item.label}</a>`;
-          }).join("")
-        : fallback;
+      const bonusItem = materials.find((item) => item.isBonus && !usedUrls.has(item.url));
+      const bonusHtml = bonusItem ? renderDownloadButton(bonusItem, "Depois dos 7 Dias") : "";
 
       return `
         <div class="panel center">
@@ -144,8 +315,10 @@
           <p>Oi, <strong>${data.name || "Gabriel"}</strong>.</p>
           <p class="muted">Seus materiais foram preparados com sucesso.</p>
         </div>
+
         <div class="actions">
           ${buttons}
+          ${bonusHtml}
           <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar plataforma bônus vitalícia</a>
           ${MemberApi.backToPanelHtml(token)}
         </div>
@@ -194,4 +367,5 @@
   </script>
 </body>
 </html>
+
 
