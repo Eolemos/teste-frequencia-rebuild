@@ -7,164 +7,214 @@
   <meta name="robots" content="noindex,nofollow" />
   <style>
     *{box-sizing:border-box}
+
+    :root{
+      --black:#030303;
+      --black-2:#090909;
+      --black-3:#121212;
+      --card:#0d0d0d;
+      --gold:#D9B12C;
+      --gold-2:#C79F22;
+      --gold-soft:rgba(217,177,44,.16);
+      --text:#ffffff;
+      --muted:#d6d0bd;
+      --line:rgba(217,177,44,.26);
+    }
+
     body{
       margin:0;
       min-height:100vh;
       font-family:Inter, Poppins, "Segoe UI", Arial, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(217,177,44,.20), transparent 32%),
-        linear-gradient(180deg,#111827 0%,#070b12 55%,#030712 100%);
-      color:#fff;
+        radial-gradient(circle at top, rgba(217,177,44,.22), transparent 34%),
+        linear-gradient(180deg,var(--black) 0%,var(--black-2) 52%,#000 100%);
+      color:var(--text);
       display:flex;
       align-items:center;
       justify-content:center;
       padding:26px 14px;
     }
+
     .wrap{
       width:min(760px,100%);
     }
+
     .card{
-      background:rgba(15,23,42,.94);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 24px 90px rgba(0,0,0,.45);
-      border-radius:26px;
+      background:linear-gradient(180deg,#101010 0%,#070707 100%);
+      border:1px solid var(--line);
+      box-shadow:0 24px 90px rgba(0,0,0,.72), 0 0 42px rgba(217,177,44,.08);
+      border-radius:28px;
       overflow:hidden;
     }
+
     .top{
-      padding:34px 24px 22px;
+      padding:36px 24px 24px;
       text-align:center;
-      background:linear-gradient(135deg,rgba(22,163,74,.22),rgba(217,177,44,.16));
-      border-bottom:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(circle at top, rgba(217,177,44,.28), transparent 52%),
+        linear-gradient(135deg,rgba(217,177,44,.18),rgba(0,0,0,.12));
+      border-bottom:1px solid var(--line);
     }
+
     .seal{
-      width:72px;
-      height:72px;
+      width:76px;
+      height:76px;
       border-radius:999px;
       display:flex;
       align-items:center;
       justify-content:center;
-      margin:0 auto 16px;
-      background:#16a34a;
-      color:#fff;
-      font-size:40px;
-      font-weight:900;
-      box-shadow:0 12px 35px rgba(22,163,74,.35);
+      margin:0 auto 18px;
+      background:linear-gradient(135deg,var(--gold),var(--gold-2));
+      color:#090909;
+      font-size:42px;
+      font-weight:1000;
+      box-shadow:0 14px 38px rgba(217,177,44,.30);
+      border:1px solid rgba(255,255,255,.22);
     }
+
     h1{
       margin:0;
-      font-size:clamp(28px,7vw,44px);
+      font-size:clamp(30px,7vw,46px);
       line-height:1.05;
-      letter-spacing:-.04em;
+      letter-spacing:-.045em;
+      color:#fff;
     }
+
     .sub{
-      margin:14px auto 0;
+      margin:15px auto 0;
       max-width:58ch;
-      color:#d1d5db;
+      color:var(--muted);
       font-size:18px;
       line-height:1.55;
     }
+
     .body{
       padding:26px 22px 30px;
     }
+
     .box{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:20px;
-      padding:20px;
+      background:rgba(255,255,255,.035);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:21px;
       margin-bottom:16px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
     }
+
     .box h2{
       margin:0 0 12px;
-      font-size:21px;
-      color:#facc15;
+      font-size:22px;
+      color:var(--gold);
+      letter-spacing:-.02em;
     }
+
     .box p{
       margin:0 0 12px;
-      color:#e5e7eb;
+      color:#f5f1e7;
       line-height:1.6;
       font-size:16px;
     }
+
     .steps{
       counter-reset:item;
       display:grid;
       gap:12px;
       margin-top:14px;
     }
+
     .step{
       position:relative;
-      padding:15px 15px 15px 54px;
-      border-radius:16px;
-      background:rgba(0,0,0,.24);
-      border:1px solid rgba(255,255,255,.08);
-      color:#f9fafb;
-      line-height:1.48;
+      padding:15px 15px 15px 56px;
+      border-radius:17px;
+      background:rgba(0,0,0,.34);
+      border:1px solid rgba(217,177,44,.18);
+      color:#fff;
+      line-height:1.5;
     }
+
     .step:before{
       counter-increment:item;
       content:counter(item);
       position:absolute;
       left:14px;
       top:14px;
-      width:28px;
-      height:28px;
+      width:30px;
+      height:30px;
       border-radius:50%;
-      background:#16a34a;
-      color:white;
+      background:linear-gradient(135deg,var(--gold),var(--gold-2));
+      color:#080808;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-weight:900;
+      font-weight:1000;
+      box-shadow:0 8px 20px rgba(217,177,44,.22);
     }
+
     .email-name{
       display:inline-block;
-      padding:3px 8px;
-      border-radius:8px;
-      background:rgba(250,204,21,.14);
-      color:#fde68a;
-      font-weight:800;
+      padding:4px 9px;
+      border-radius:9px;
+      background:rgba(217,177,44,.14);
+      color:#F6D76A;
+      font-weight:900;
+      border:1px solid rgba(217,177,44,.20);
     }
+
     .btns{
       display:grid;
       gap:12px;
       margin-top:18px;
     }
+
     .btn{
       display:block;
       text-align:center;
       text-decoration:none;
       padding:16px 18px;
       border-radius:999px;
-      font-weight:900;
+      font-weight:1000;
       font-size:17px;
+      transition:transform .15s ease, box-shadow .15s ease;
     }
+
+    .btn:active{
+      transform:scale(.98);
+    }
+
     .btn.primary{
-      background:#16a34a;
-      color:white;
-      box-shadow:0 14px 34px rgba(22,163,74,.28);
+      background:linear-gradient(135deg,var(--gold),var(--gold-2));
+      color:#050505;
+      box-shadow:0 14px 34px rgba(217,177,44,.24);
+      border:1px solid rgba(255,255,255,.18);
     }
+
     .btn.secondary{
-      background:rgba(255,255,255,.08);
-      color:#fff;
-      border:1px solid rgba(255,255,255,.14);
+      background:#080808;
+      color:var(--gold);
+      border:1px solid rgba(217,177,44,.36);
     }
+
     .warn{
-      color:#fef3c7 !important;
-      font-weight:700;
+      color:#F6D76A !important;
+      font-weight:800;
     }
+
     .small{
       font-size:14px !important;
-      color:#9ca3af !important;
+      color:#b9b09a !important;
     }
+
     .footer{
       text-align:center;
-      color:#9ca3af;
+      color:#9f967f;
       font-size:13px;
       padding:0 22px 26px;
       line-height:1.5;
     }
+
     @media (max-width:520px){
-      body{padding:0;background:#070b12}
-      .card{border-radius:0;min-height:100vh}
+      body{padding:0;background:#000}
+      .card{border-radius:0;min-height:100vh;border-left:0;border-right:0}
       .top{padding-top:42px}
       .body{padding:22px 16px 28px}
       .box{padding:18px 15px}
@@ -192,11 +242,9 @@
           </p>
 
           <div class="steps">
+            <div class="step">Abra o e-mail usado na compra.</div>
             <div class="step">
-              Abra o e-mail usado na compra.
-            </div>
-            <div class="step">
-              Procure pelo e-mail enviado por nossa equipe com o botão verde
+              Procure pelo e-mail enviado por nossa equipe com o botão
               <strong>“Acessar minha leitura”</strong>.
             </div>
             <div class="step">
@@ -218,12 +266,8 @@
             Verifique também as abas <strong>Promoções</strong>, <strong>Atualizações</strong>,
             <strong>Spam</strong> ou <strong>Lixo eletrônico</strong>.
           </p>
-          <p>
-            No Gmail, pesquise por:
-          </p>
-          <p>
-            <span class="email-name">Sua leitura foi liberada</span>
-          </p>
+          <p>No Gmail, pesquise por:</p>
+          <p><span class="email-name">Sua leitura foi liberada</span></p>
         </div>
 
         <div class="box">
