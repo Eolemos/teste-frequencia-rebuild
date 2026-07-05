@@ -1,0 +1,256 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compra confirmada | Leitura de Frequência</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter, Poppins, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(217,177,44,.20), transparent 32%),
+        linear-gradient(180deg,#111827 0%,#070b12 55%,#030712 100%);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:26px 14px;
+    }
+    .wrap{
+      width:min(760px,100%);
+    }
+    .card{
+      background:rgba(15,23,42,.94);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 24px 90px rgba(0,0,0,.45);
+      border-radius:26px;
+      overflow:hidden;
+    }
+    .top{
+      padding:34px 24px 22px;
+      text-align:center;
+      background:linear-gradient(135deg,rgba(22,163,74,.22),rgba(217,177,44,.16));
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .seal{
+      width:72px;
+      height:72px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto 16px;
+      background:#16a34a;
+      color:#fff;
+      font-size:40px;
+      font-weight:900;
+      box-shadow:0 12px 35px rgba(22,163,74,.35);
+    }
+    h1{
+      margin:0;
+      font-size:clamp(28px,7vw,44px);
+      line-height:1.05;
+      letter-spacing:-.04em;
+    }
+    .sub{
+      margin:14px auto 0;
+      max-width:58ch;
+      color:#d1d5db;
+      font-size:18px;
+      line-height:1.55;
+    }
+    .body{
+      padding:26px 22px 30px;
+    }
+    .box{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:20px;
+      padding:20px;
+      margin-bottom:16px;
+    }
+    .box h2{
+      margin:0 0 12px;
+      font-size:21px;
+      color:#facc15;
+    }
+    .box p{
+      margin:0 0 12px;
+      color:#e5e7eb;
+      line-height:1.6;
+      font-size:16px;
+    }
+    .steps{
+      counter-reset:item;
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+    .step{
+      position:relative;
+      padding:15px 15px 15px 54px;
+      border-radius:16px;
+      background:rgba(0,0,0,.24);
+      border:1px solid rgba(255,255,255,.08);
+      color:#f9fafb;
+      line-height:1.48;
+    }
+    .step:before{
+      counter-increment:item;
+      content:counter(item);
+      position:absolute;
+      left:14px;
+      top:14px;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background:#16a34a;
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+    }
+    .email-name{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:8px;
+      background:rgba(250,204,21,.14);
+      color:#fde68a;
+      font-weight:800;
+    }
+    .btns{
+      display:grid;
+      gap:12px;
+      margin-top:18px;
+    }
+    .btn{
+      display:block;
+      text-align:center;
+      text-decoration:none;
+      padding:16px 18px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:17px;
+    }
+    .btn.primary{
+      background:#16a34a;
+      color:white;
+      box-shadow:0 14px 34px rgba(22,163,74,.28);
+    }
+    .btn.secondary{
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .warn{
+      color:#fef3c7 !important;
+      font-weight:700;
+    }
+    .small{
+      font-size:14px !important;
+      color:#9ca3af !important;
+    }
+    .footer{
+      text-align:center;
+      color:#9ca3af;
+      font-size:13px;
+      padding:0 22px 26px;
+      line-height:1.5;
+    }
+    @media (max-width:520px){
+      body{padding:0;background:#070b12}
+      .card{border-radius:0;min-height:100vh}
+      .top{padding-top:42px}
+      .body{padding:22px 16px 28px}
+      .box{padding:18px 15px}
+      .sub{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="top">
+        <div class="seal">✓</div>
+        <h1>Compra confirmada</h1>
+        <p class="sub">
+          Sua Leitura de Frequência foi liberada. Agora o acesso chega no seu e-mail com um link seguro e exclusivo.
+        </p>
+      </div>
+
+      <div class="body">
+        <div class="box">
+          <h2>Como acessar sua leitura agora</h2>
+          <p>
+            Dentro de alguns instantes você receberá um e-mail com o assunto
+            <span class="email-name">Sua leitura foi liberada ✨</span>.
+          </p>
+
+          <div class="steps">
+            <div class="step">
+              Abra o e-mail usado na compra.
+            </div>
+            <div class="step">
+              Procure pelo e-mail enviado por nossa equipe com o botão verde
+              <strong>“Acessar minha leitura”</strong>.
+            </div>
+            <div class="step">
+              Clique no botão do e-mail. Ele vai abrir sua área segura no site
+              <strong>teste-de-frequencia.top</strong>.
+            </div>
+            <div class="step">
+              Complete as informações solicitadas na área de acesso para liberar seus materiais personalizados.
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <h2>Não encontrou o e-mail?</h2>
+          <p class="warn">
+            Aguarde de 1 a 5 minutos. Em alguns casos o e-mail pode demorar um pouco para chegar.
+          </p>
+          <p>
+            Verifique também as abas <strong>Promoções</strong>, <strong>Atualizações</strong>,
+            <strong>Spam</strong> ou <strong>Lixo eletrônico</strong>.
+          </p>
+          <p>
+            No Gmail, pesquise por:
+          </p>
+          <p>
+            <span class="email-name">Sua leitura foi liberada</span>
+          </p>
+        </div>
+
+        <div class="box">
+          <h2>Importante</h2>
+          <p>
+            O link de acesso é individual. Guarde o e-mail para acessar sua leitura sempre que precisar.
+          </p>
+          <p class="small">
+            Se você digitou o e-mail errado na compra ou não recebeu nada após alguns minutos,
+            entre em contato com o suporte informando o e-mail usado na compra.
+          </p>
+
+          <div class="btns">
+            <a class="btn primary" href="https://mail.google.com/" target="_blank" rel="noopener">
+              Abrir meu Gmail
+            </a>
+            <a class="btn secondary" href="mailto:contato@teste-de-frequencia.top?subject=Ajuda%20com%20meu%20acesso%20-%20Leitura%20de%20Frequ%C3%AAncia">
+              Falar com suporte
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        Leitura de Frequência • Acesso seguro enviado por e-mail
+      </div>
+    </section>
+  </main>
+</body>
+</html>
