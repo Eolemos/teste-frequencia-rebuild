@@ -8,7 +8,7 @@
     "6a3d6e4702a941bb30574843": "diagnostico_destino_5.mp4",
     "6a3d6e6069f3e258e2cea859": "diagnostico_destino_6.mp4",
     "6a3d9493583018d5609e2efe": "diagnostico_destino_7.mp4",
-    "6a3d6c9cd8a1f8a3e9edcec8": "diagnostico_destino_8.mp4",
+    "6a3d6c9cd8a1f8a3e9edcec8": "diagnostico_destino_5.mp4",
     "6a3d6cb2b84c1d6bd60690e1": "diagnostico_destino_9.mp4",
     "6a3d6ec0b46ed3da55697a72": "diagnostico_dinheiro.mp4",
     "6a3d6f0eab74e8fd0f26b316": "diagnostico_felicidade.mp4",
@@ -28,6 +28,15 @@
     "6a3d6f579f8674db4f7a52f1": true,
     "6a3d733a02a941bb305752f1": true,
     "6a3d74a7cbea5b52000eefbd": true
+  };
+  var p2RevealTimes = {
+    "6a3d6ec0b46ed3da55697a72": 2281,
+    "6a3d6f0eab74e8fd0f26b316": 2283,
+    "6a3d755f939c8f300cf46d33": 2274,
+    "6a3d7456cbea5b52000eef26": 2309,
+    "6a3d6f579f8674db4f7a52f1": 2307,
+    "6a3d733a02a941bb305752f1": 2278,
+    "6a3d74a7cbea5b52000eefbd": 2283
   };
 
   function addStyles() {
@@ -68,6 +77,7 @@
     var checkout = options.checkout || window.__xamanicoCheckoutUrl || "https://pay.cakto.com.br/ecs6z2x";
     var pitchTime = Number(options.pitchTime || 0);
     var stage = options.stage || inferStage(playerId, container);
+    var p2RevealTime = Number(options.p2RevealTime || p2RevealTimes[playerId] || 0);
 
     container.innerHTML = [
       '<div class="xamanico-local-player">',
@@ -177,6 +187,10 @@
     if (tap) tap.addEventListener("click", playWithSound);
     player.addEventListener("timeupdate", function () {
       if (stage === "final" && pitchTime > 0 && player.currentTime >= pitchTime) revealCta();
+      if (stage === "p2" && p2RevealTime > 0 && player.currentTime >= p2RevealTime) {
+        completeStage();
+        return;
+      }
       if (player.duration && isFinite(player.duration) && player.duration - player.currentTime <= 1.25) {
         completeStage();
       }
@@ -228,4 +242,5 @@
 
   window.__xamanicoMountLocalPlayer = mountLocalPlayer;
   window.__xamanicoPlayerToMp4 = playerToMp4;
+  window.__xamanicoP2RevealTimes = p2RevealTimes;
 })();
