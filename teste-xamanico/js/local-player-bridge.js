@@ -19,6 +19,16 @@
     "6a3d74a7cbea5b52000eefbd": "diagnostico_mulher_solteira.mp4",
     "6a2b239e8950ec706cbf71a9": "final_pitch.mp4"
   };
+  var finalPlayerId = "6a2b239e8950ec706cbf71a9";
+  var p2Players = {
+    "6a3d6ec0b46ed3da55697a72": true,
+    "6a3d6f0eab74e8fd0f26b316": true,
+    "6a3d755f939c8f300cf46d33": true,
+    "6a3d7456cbea5b52000eef26": true,
+    "6a3d6f579f8674db4f7a52f1": true,
+    "6a3d733a02a941bb305752f1": true,
+    "6a3d74a7cbea5b52000eefbd": true
+  };
 
   function addStyles() {
     if (document.getElementById("xamanico-local-player-style")) return;
@@ -57,6 +67,7 @@
     var source = BASE + "/video/mp4/" + mp4Name;
     var checkout = options.checkout || window.__xamanicoCheckoutUrl || "https://pay.cakto.com.br/ecs6z2x";
     var pitchTime = Number(options.pitchTime || 0);
+    var stage = options.stage || inferStage(playerId, container);
 
     container.innerHTML = [
       '<div class="xamanico-local-player">',
@@ -72,6 +83,80 @@
     var player = container.querySelector("video");
     var tap = container.querySelector(".xamanico-local-player__tap");
     var cta = container.querySelector(".xamanico-local-player__cta");
+    var completed = false;
+
+    function getApp() {
+      return window.__xamanicoApp || null;
+    }
+
+    function dispatchProgressEvent(name) {
+      if (!window.CustomEvent) return;
+      window.dispatchEvent(new CustomEvent(name, {
+        detail: {
+          stage: stage,
+          playerId: playerId,
+          mp4: mp4Name
+        }
+      }));
+    }
+
+    function revealEmailOptin() {
+      var app = getApp();
+      if (app && typeof app.showEmailOptinModal === "function") {
+        app.showEmailOptinModal();
+        return;
+      }
+      var modal = document.getElementById("email-optin-modal") || document.getElementById("email-opt-in-modal");
+      if (!modal) return;
+      modal.hidden = false;
+      modal.removeAttribute("hidden");
+      modal.classList.remove("parte2-hidden");
+      modal.style.display = "";
+      if (modal.scrollIntoView) modal.scrollIntoView({ block: "start" });
+    }
+
+    function revealPitchStep() {
+      var app = getApp();
+      if (app) {
+        app.parte3 = false;
+        app.showPlayer = false;
+        app.parte4 = true;
+        if (typeof app.$nextTick === "function") {
+          app.$nextTick(function () {
+            var button = document.querySelector(".parte2-fullscreen + section .button-form") || document.querySelector(".button-form.pulsating-button");
+            if (button && button.scrollIntoView) button.scrollIntoView({ block: "center" });
+          });
+        }
+        return;
+      }
+      var buttons = document.querySelectorAll("button");
+      Array.prototype.some.call(buttons, function (button) {
+        if (button.textContent && button.textContent.indexOf("Quero ver minhas energias ancestrais") !== -1) {
+          button.hidden = false;
+          button.style.display = "";
+          if (button.scrollIntoView) button.scrollIntoView({ block: "center" });
+          return true;
+        }
+        return false;
+      });
+    }
+
+    function revealCta() {
+      if (cta) cta.classList.add("is-visible");
+    }
+
+    function completeStage() {
+      if (completed) return;
+      completed = true;
+      dispatchProgressEvent("xamanico:mp4-ended");
+      if (stage === "p1") {
+        revealEmailOptin();
+      } else if (stage === "p2") {
+        revealPitchStep();
+      } else if (stage === "final") {
+        revealCta();
+      }
+    }
 
     function playWithSound() {
       player.muted = false;
@@ -91,8 +176,12 @@
 
     if (tap) tap.addEventListener("click", playWithSound);
     player.addEventListener("timeupdate", function () {
-      if (pitchTime > 0 && player.currentTime >= pitchTime) cta.classList.add("is-visible");
+      if (stage === "final" && pitchTime > 0 && player.currentTime >= pitchTime) revealCta();
+      if (player.duration && isFinite(player.duration) && player.duration - player.currentTime <= 1.25) {
+        completeStage();
+      }
     });
+    player.addEventListener("ended", completeStage);
     resumePlayback();
 
     return true;
@@ -105,13 +194,19 @@
     return "";
   }
 
+  function inferStage(playerId, element) {
+    if (playerId === finalPlayerId || element.id === "ab-68ccae2e1563ea2ce057a320") return "final";
+    if (p2Players[playerId]) return "p2";
+    return "p1";
+  }
+
   function scanAndMountLocalPlayers() {
     var players = document.querySelectorAll("vturb-smartplayer");
     Array.prototype.forEach.call(players, function (element) {
       if (element.querySelector("video")) return;
       var playerId = inferPlayerIdFromElement(element);
       if (!playerId) return;
-      var options = element.id === "ab-68ccae2e1563ea2ce057a320" ? { pitchTime: 945 } : {};
+      var options = element.id === "ab-68ccae2e1563ea2ce057a320" ? { stage: "final", pitchTime: 945 } : {};
       mountLocalPlayer(element, playerId, options);
     });
   }
