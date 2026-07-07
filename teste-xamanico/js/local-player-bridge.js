@@ -50,6 +50,9 @@
       ".xamanico-local-player__tap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.12);z-index:5;cursor:pointer}",
       ".xamanico-local-player__tap-box{padding:24px;border:2px solid #fff;border-radius:9px;background:rgba(27,128,28,.9);color:#fff;text-align:center;font:700 22px/1.2 Arial,sans-serif;cursor:pointer}",
       ".xamanico-local-player__tap-box span{display:block;margin-top:12px}",
+      ".xamanico-local-player__next{display:none;justify-content:center;margin-top:16px;padding:0 10px}",
+      ".xamanico-local-player__next.is-visible{display:flex}",
+      ".xamanico-local-player__next button{display:inline-flex;align-items:center;justify-content:center;min-height:56px;width:100%;max-width:410px;padding:14px 22px;border:0;border-radius:999px;background:#13ed3c;color:#fff;text-align:center;font:700 18px/1.15 Arial,sans-serif;box-shadow:0 4px 18px rgba(19,237,60,.35);cursor:pointer}",
       ".xamanico-local-player__cta{display:none;justify-content:center;margin-top:16px}",
       ".xamanico-local-player__cta.is-visible{display:flex}",
       ".xamanico-local-player__cta a{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:14px 30px;border-radius:999px;background:#13ed3c;color:#fff;text-decoration:none;font:700 20px Arial,sans-serif;box-shadow:0 4px 18px rgba(19,237,60,.35)}"
@@ -86,12 +89,14 @@
       "</video>",
       '<div class="xamanico-local-player__tap"><button type="button" class="xamanico-local-player__tap-box">Seu video ja comecou<span>Clique para ouvir</span></button></div>',
       "</div>",
+      '<div class="xamanico-local-player__next"><button type="button">Quero ver minhas energias ancestrais</button></div>',
       '<div class="xamanico-local-player__cta"><a href="' + checkout + '">Comprar agora</a></div>',
       "</div>"
     ].join("");
 
     var player = container.querySelector("video");
     var tap = container.querySelector(".xamanico-local-player__tap");
+    var nextStep = container.querySelector(".xamanico-local-player__next");
     var cta = container.querySelector(".xamanico-local-player__cta");
     var completed = false;
 
@@ -126,6 +131,7 @@
     }
 
     function revealPitchStep() {
+      if (nextStep) nextStep.classList.add("is-visible");
       var app = getApp();
       if (app) {
         app.parte3 = true;
@@ -148,6 +154,20 @@
         }
         return false;
       });
+    }
+
+    function goToPitch() {
+      var app = getApp();
+      if (app && typeof app.showPitch === "function") {
+        app.showPitch();
+        return;
+      }
+      if (app) {
+        app.parte5 = true;
+        app.parte4 = false;
+        app.parte3 = false;
+        app.showPlayer = false;
+      }
     }
 
     function revealCta() {
@@ -184,6 +204,7 @@
     }
 
     if (tap) tap.addEventListener("click", playWithSound);
+    if (nextStep) nextStep.addEventListener("click", goToPitch);
     player.addEventListener("timeupdate", function () {
       if (stage === "final" && pitchTime > 0 && player.currentTime >= pitchTime) revealCta();
       if (stage === "p2" && p2RevealTime > 0 && player.currentTime >= p2RevealTime) {
