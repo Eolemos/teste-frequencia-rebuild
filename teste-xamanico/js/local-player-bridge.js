@@ -20,6 +20,7 @@
     "6a2b239e8950ec706cbf71a9": "final_pitch.mp4"
   };
   var finalPlayerId = "6a2b239e8950ec706cbf71a9";
+  var finalCtaTime = 1267;
   var p2Players = {
     "6a3d6ec0b46ed3da55697a72": true,
     "6a3d6f0eab74e8fd0f26b316": true,
@@ -55,7 +56,7 @@
       ".xamanico-local-player__next button{display:inline-flex;align-items:center;justify-content:center;min-height:56px;width:100%;max-width:410px;padding:14px 22px;border:0;border-radius:999px;background:#13ed3c;color:#fff;text-align:center;font:700 18px/1.15 Arial,sans-serif;box-shadow:0 4px 18px rgba(19,237,60,.35);cursor:pointer}",
       ".xamanico-local-player__cta{display:none;justify-content:center;margin-top:16px}",
       ".xamanico-local-player__cta.is-visible{display:flex}",
-      ".xamanico-local-player__cta a{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:14px 30px;border-radius:999px;background:#13ed3c;color:#fff;text-decoration:none;font:700 20px Arial,sans-serif;box-shadow:0 4px 18px rgba(19,237,60,.35)}"
+      ".xamanico-local-player__cta a{display:inline-flex;align-items:center;justify-content:center;min-height:54px;width:100%;max-width:410px;padding:14px 24px;border-radius:999px;background:#13ed3c;color:#fff;text-align:center;text-decoration:none;font:700 20px/1.15 Arial,sans-serif;box-shadow:0 4px 18px rgba(19,237,60,.35)}"
     ].join("");
     document.head.appendChild(style);
   }
@@ -81,6 +82,7 @@
     var pitchTime = Number(options.pitchTime || 0);
     var stage = options.stage || inferStage(playerId, container);
     var p2RevealTime = Number(options.p2RevealTime || p2RevealTimes[playerId] || 0);
+    var finalCtaId = stage === "final" ? ' id="xamanico-final-cta"' : "";
 
     container.innerHTML = [
       '<div class="xamanico-local-player">',
@@ -90,7 +92,7 @@
       '<div class="xamanico-local-player__tap"><button type="button" class="xamanico-local-player__tap-box">Seu video ja comecou<span>Clique para ouvir</span></button></div>',
       "</div>",
       '<div class="xamanico-local-player__next"><button type="button">Quero ver minhas energias ancestrais</button></div>',
-      '<div class="xamanico-local-player__cta"><a href="' + checkout + '">Comprar agora</a></div>',
+      '<div class="xamanico-local-player__cta"' + finalCtaId + '><a href="' + checkout + '">Quero garantir minha leitura agora</a></div>',
       "</div>"
     ].join("");
 
@@ -171,7 +173,9 @@
     }
 
     function revealCta() {
-      if (cta) cta.classList.add("is-visible");
+      if (!cta) return;
+      cta.classList.add("is-visible");
+      if (stage === "final") cta.id = "xamanico-final-cta";
     }
 
     function completeStage() {
@@ -240,7 +244,7 @@
       if (element.querySelector("video")) return;
       var playerId = inferPlayerIdFromElement(element);
       if (!playerId) return;
-      var options = element.id === "ab-68ccae2e1563ea2ce057a320" ? { stage: "final", pitchTime: 945 } : {};
+      var options = element.id === "ab-68ccae2e1563ea2ce057a320" ? { stage: "final", pitchTime: finalCtaTime } : {};
       mountLocalPlayer(element, playerId, options);
     });
   }
