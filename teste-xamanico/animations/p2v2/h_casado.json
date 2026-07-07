@@ -1,0 +1,599 @@
+[
+    {
+        "frameName": "titleOla",
+        "type": "title",
+        "content": "Obrigada por continuar comigo!",
+        "style": {
+            "font-size": "2.5rem",
+            "max-width": "80vw"
+        },
+        "dataLayer": {
+            "event": "num-p2-play"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 0,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 4,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgDividaKarmica",
+        "type": "image",
+        "content": "../assets/imgs/img_analisexamanica.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 5,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 24,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "imgCaminhoDividaKarica",
+        "type": "image",
+        "content": "../assets/imgs/img_submerso_energia.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "center",
+                "duration": 1,
+                "time": 25,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1,
+                    "delay": ""
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 39,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgVidasPassadasDizem",
+        "type": "image",
+        "content": "../assets/imgs/img_baldeFurado.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 40,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 98,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "listQuestions",
+        "type": "list_text",
+        "itens": [
+           {
+              "nameItem": "Seus Relacionamentos",
+              "efects": [
+                 {
+                    "type_animation": "fromTo",
+                    "position_from": "bottom_center",
+                    "position_to": "center_center_top",
+                    "duration": 1,
+                    "time": 140,
+                    "from_animation": {
+                       "opacity": 0
+                    },
+                    "to_animation": {
+                       "opacity": 1
+                    }
+                 },
+                 {
+                    "type_animation": "to",
+                    "duration": 1,
+                    "time": 147,
+                    "to_animation": {
+                       "opacity": 0
+                    }
+                 }
+              ]
+           },
+           {
+              "nameItem": "Sua Situação Financeira",
+              "efects": [
+                 {
+                    "type_animation": "fromTo",
+                    "position_from": "bottom_center",
+                    "position_to": "center_center_top",
+                    "time": 143,
+                    "duration": 1,
+                    "from_animation": {
+                       "opacity": 0
+                    },
+                    "to_animation": {
+                       "opacity": 1
+                    }
+                 },
+                 {
+                    "type_animation": "to",
+                    "duration": 1,
+                    "time": 147,
+                    "to_animation": {
+                       "opacity": 0
+                    }
+                 }
+              ]
+           },
+           {
+              "nameItem": "Seu Futuro",
+              "efects": [
+                 {
+                    "type_animation": "fromTo",
+                    "position_from": "bottom_center",
+                    "position_to": "center_center_top",
+                    "time": 145,
+                    "duration": 1,
+                    "from_animation": {
+                       "opacity": 0
+                    },
+                    "to_animation": {
+                       "opacity": 1
+                    }
+                 },
+                 {
+                    "type_animation": "to",
+                    "duration": 1,
+                    "time": 147,
+                    "to_animation": {
+                       "opacity": 0
+                    }
+                 }
+              ]
+           }
+        ]
+     },
+     {
+        "frameName": "titlePessoaÚnica",
+        "type": "title",
+        "content": "Você é uma pessoa ÚNICA e rara!",
+        "style": {
+           "width": "350px",
+           "max-width": "80vw"
+        },
+        "efects": [
+           {
+              "type_animation": "fromTo",
+              "position_from": "center",
+              "position_to": "",
+              "duration": 1,
+              "time": 150,
+              "from_animation": {
+                 "opacity": 0,
+                 "scale": 1
+              },
+              "to_animation": {
+                 "opacity": 1,
+                 "scale": 1
+              }
+           },
+           {
+              "type_animation": "to",
+              "duration": 1,
+              "time": 156,
+              "to_animation": {
+                 "opacity": 0,
+                 "scale": 1
+              }
+           }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_tesouro_oculto.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 99,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 133,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_chave_xamanica.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 134,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 149,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_mahila.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 150,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 157,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_mahila_casada.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 158,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 184,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_xamanica.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 185,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 216,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_xamanica_amor.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 217,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 231,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_depoimento1_casada.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 232,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 258,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_depoimento2_casada.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 259,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 281,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+    {
+        "frameName": "imgOportunidadeUnica",
+        "type": "image",
+        "content": "../assets/imgs/img_transformacao_xamanica.png",
+        "moving": true,
+        "style": {
+            "width": "360px",
+            "max-width": "80vw"
+        },
+        "efects": [
+            {
+                "type_animation": "fromTo",
+                "position_from": "center",
+                "position_to": "",
+                "duration": 1,
+                "time": 282,
+                "from_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                },
+                "to_animation": {
+                    "opacity": 1,
+                    "scale": 1
+                }
+            },
+            {
+                "type_animation": "to",
+                "duration": 1,
+                "time": 291,
+                "to_animation": {
+                    "opacity": 0,
+                    "scale": 1
+                }
+            }
+        ]
+    },
+
+    {
+        "frameName": "form3",
+        "type": "form",
+        "content": "[form3]",
+        "time": 294
+    }
+]

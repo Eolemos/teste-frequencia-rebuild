@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="/teste-xamanico/favicon.png">
+  <title>Leitura Xamanica</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rosarivo:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/teste-xamanico/css/astrologyStyle.css">
+  <style>
+    .xamanico-static-fallback {
+      min-height: 100vh;
+      padding: 28px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Sora, Arial, sans-serif;
+      color: #fff;
+      text-align: center;
+      background:
+        linear-gradient(rgba(0, 0, 0, .58), rgba(0, 0, 0, .58)),
+        url("img/bg_xaman.db4202d6.png") center/cover no-repeat;
+    }
+
+    .xamanico-static-fallback__wrap {
+      width: min(960px, 100%);
+      margin: 0 auto;
+    }
+
+    .xamanico-static-fallback h1 {
+      margin: 0 0 16px;
+      font-size: clamp(1.65rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .xamanico-static-fallback p {
+      max-width: 760px;
+      margin: 0 auto 24px;
+      font-size: clamp(1rem, 2.3vw, 1.25rem);
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .xamanico-static-fallback__card {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 18px;
+      border-radius: 10px;
+      background: rgba(39, 39, 39, .78);
+      border: 1px solid rgba(0, 0, 0, .4);
+      box-shadow: 0 0 15px rgba(0, 0, 0, .39);
+    }
+
+    .xamanico-static-fallback__label {
+      display: inline-block;
+      width: auto;
+      margin-bottom: 18px;
+      padding: 10px;
+      border-radius: 14px;
+      background: #228b22;
+      color: #fff;
+      font-size: clamp(1.1rem, 3vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .xamanico-static-fallback__months {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .xamanico-static-fallback__months button {
+      width: 100%;
+      padding: 10px;
+      border: 0;
+      border-bottom: 3px solid #228b22;
+      border-radius: 4px;
+      background: #f8f8f8;
+      color: #111;
+      font: 700 1.1rem Sora, Arial, sans-serif;
+    }
+
+    @media (max-width: 640px) {
+      .xamanico-static-fallback__months {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+  <script src="/teste-xamanico/js/jquery.min.js" charset="UTF-8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.fbq = window.fbq || function () {};
+  </script>
+  <script defer src="/teste-xamanico/js/chunk-vendors.33505542.js" charset="UTF-8"></script>
+  <script defer src="/teste-xamanico/js/app.56782e30.js" charset="UTF-8"></script>
+</head>
+<body>
+  <noscript><strong>Ative o JavaScript para continuar.</strong></noscript>
+  <div id="app">
+    <main class="xamanico-static-fallback" aria-label="Teste Xamanico">
+      <div class="xamanico-static-fallback__wrap">
+        <h1>TESTE XAMANICO GRATIS</h1>
+        <p>Clique abaixo no SEU MES DE NASCIMENTO e inicie seu TESTE PERSONALIZADO para descobrir o atalho para ter um 2026 abundante no Amor, Saude, Sorte e Financas!</p>
+        <section class="xamanico-static-fallback__card">
+          <div class="xamanico-static-fallback__label">CLIQUE NO SEU MES DE NASCIMENTO</div>
+          <ul class="xamanico-static-fallback__months">
+            <li><button type="button">Janeiro</button></li>
+            <li><button type="button">Fevereiro</button></li>
+            <li><button type="button">Marco</button></li>
+            <li><button type="button">Abril</button></li>
+            <li><button type="button">Maio</button></li>
+            <li><button type="button">Junho</button></li>
+            <li><button type="button">Julho</button></li>
+            <li><button type="button">Agosto</button></li>
+            <li><button type="button">Setembro</button></li>
+            <li><button type="button">Outubro</button></li>
+            <li><button type="button">Novembro</button></li>
+            <li><button type="button">Dezembro</button></li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" async defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/CSSRulePlugin.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/teste-xamanico/js/checkout-override.js" charset="UTF-8"></script>
+  <script src="/teste-xamanico/js/local-player-bridge.js" charset="UTF-8"></script>
+</body>
+</html>
+
+

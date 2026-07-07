@@ -1,0 +1,505 @@
+[
+   {
+      "type": "title",
+      "name": "name&birthDate",
+      "content": "Leitura Xamânica para<br>[nome]<br> Elemento: [elemento] <br> Animal de Poder: Carregando...",
+      "efects": [
+           {
+               "type_animation": "fromTo",
+               "position_from": "top_center",
+               "position_to": "top_center",
+               "duration": 1,
+               "time": 0,
+               "from_animation": {
+                   "opacity": 0,
+                   "scale": 1
+               },
+               "to_animation": {
+                   "opacity": 1,
+                   "scale": 1,
+                   "delay": ""
+               }
+           },
+           {
+               "type_animation": "to",
+               "duration": 1,
+               "time": 8,
+               "to_animation": {
+                   "opacity": 0,
+                   "scale": 1
+               }
+           }
+       ]
+      },
+     {
+        "frameName": "imgExplorador",
+        "type": "image",
+        "content": "../assets/imgs/spiritual-explorer.png",
+        "moving": true,
+        "style": {
+           "width": "350px",
+           "max-width": "80vw"
+        },
+        "efects": [
+           {
+              "type_animation": "fromTo",
+              "position_from": "center",
+              "position_to": "",
+              "duration": 1,
+              "time": 9,
+              "from_animation": {
+                 "opacity": 0,
+                 "scale": 1
+              },
+              "to_animation": {
+                 "opacity": 1,
+                 "scale": 1
+              }
+           },
+           {
+              "type_animation": "to",
+              "duration": 1,
+              "time": 22,
+              "to_animation": {
+                 "opacity": 0,
+                 "scale": 1
+              }
+           }
+        ]
+     },
+      {
+      "frameName": "imgXamaMeditation",
+      "type": "image",
+      "content": "../assets/imgs/shaman-meditation.png",
+      "moving": true,
+      "style": {
+         "width": "350px",
+         "max-width": "80vw"
+      },
+      "efects": [
+         {
+            "type_animation": "fromTo",
+            "position_from": "center",
+            "position_to": "",
+            "duration": 1,
+            "time": 23,
+            "from_animation": {
+               "opacity": 0,
+               "scale": 1
+            },
+            "to_animation": {
+               "opacity": 1,
+               "scale": 1
+            }
+         },
+         {
+            "type_animation": "to",
+            "duration": 1,
+            "time": 29,
+            "to_animation": {
+               "opacity": 0,
+               "scale": 1
+            }
+         }
+      ]
+   },
+    {
+      "frameName": "imgRelacionamentosHarmoniosos",
+      "type": "image",
+      "content": "../assets/imgs/nature-harmony.png",
+      "moving": true,
+      "style": {
+         "width": "350px",
+         "max-width": "80vw"
+      },
+      "efects": [
+         {
+            "type_animation": "fromTo",
+            "position_from": "center",
+            "position_to": "",
+            "duration": 1,
+            "time": 30,
+            "from_animation": {
+               "opacity": 0,
+               "scale": 1
+            },
+            "to_animation": {
+               "opacity": 1,
+               "scale": 1
+            }
+         },
+         {
+            "type_animation": "to",
+            "duration": 1,
+            "time": 51,
+            "to_animation": {
+               "opacity": 0,
+               "scale": 1
+            }
+         }
+      ]
+   },
+    {
+      "frameName": "imgMaisDinheiro",
+      "type": "image",
+      "content": "../assets/imgs/ancestral-wisdom.png",
+      "style": {
+         "width": "350px",
+         "max-width": "80vw"
+      },
+      "efects": [
+         {
+            "type_animation": "fromTo",
+            "position_from": "center",
+            "position_to": "",
+            "duration": 1,
+            "time": 52,
+            "from_animation": {
+               "opacity": 0,
+               "scale": 1
+            },
+            "to_animation": {
+               "opacity": 1,
+               "scale": 1
+            }
+         },
+         {
+            "type_animation": "to",
+            "duration": 1,
+            "time": 66,
+            "to_animation": {
+               "opacity": 0,
+               "scale": 1
+            }
+         }
+      ]
+   },
+    {
+      "frameName": "imgFelicidade",
+      "type": "image",
+      "content": "../assets/imgs/shamanic-reading.png",
+      "style": {
+         "width": "350px",
+         "max-width": "80vw"
+      },
+      "efects": [
+         {
+            "type_animation": "fromTo",
+            "position_from": "center",
+            "position_to": "",
+            "duration": 1,
+            "time": 67,
+            "from_animation": {
+               "opacity": 0,
+               "scale": 1
+            },
+            "to_animation": {
+               "opacity": 1,
+               "scale": 1
+            }
+         },
+         {
+            "type_animation": "to",
+            "duration": 1,
+            "time": 115,
+            "to_animation": {
+               "opacity": 0,
+               "scale": 1
+            }
+         }
+      ]
+   },
+    {
+      "frameName": "imgVidasPassadas",
+      "type": "image",
+      "content": "../assets/imgs/img_povosantigos.png",
+      "style": {
+         "width": "350px",
+         "max-width": "80vw"
+      },
+      "efects": [
+         {
+            "type_animation": "fromTo",
+            "position_from": "center",
+            "position_to": "",
+            "duration": 1,
+            "time": 116,
+            "from_animation": {
+               "opacity": 0,
+               "scale": 1
+            },
+            "to_animation": {
+               "opacity": 1,
+               "scale": 1
+            }
+         },
+         {
+            "type_animation": "to",
+            "duration": 1,
+            "time": 131,
+            "to_animation": {
+               "opacity": 0,
+               "scale": 1
+            }
+         }
+      ]
+   },
+    {
+      "frameName": "imgNarrativasAntigas",
+      "type": "image",
+      "content": "../assets/imgs/img_portal_energia.png",
+      "moving": true,
+      "style": {
+         "width": "350px",
+         "max-width": "80vw"
+      },
+      "efects": [
+         {
+            "type_animation": "fromTo",
+            "position_from": "center",
+            "position_to": "",
+            "duration": 1,
+            "time": 132,
+            "from_animation": {
+               "opacity": 0,
+               "scale": 1
+            },
+            "to_animation": {
+               "opacity": 1,
+               "scale": 1
+            }
+         },
+         {
+            "type_animation": "to",
+            "duration": 1,
+            "time": 157,
+            "to_animation": {
+               "opacity": 0,
+               "scale": 1
+            }
+         }
+      ]
+   },
+   {
+     "frameName": "imgLeituraVidasPassadas",
+     "type": "image",
+     "content": "../assets/imgs/img_tesouro_escondido.png",
+     "moving": true,
+     "style": {
+        "width": "350px",
+        "max-width": "80vw"
+     },
+     "efects": [
+        {
+           "type_animation": "fromTo",
+           "position_from": "center",
+           "position_to": "",
+           "duration": 1,
+           "time": 158,
+           "from_animation": {
+              "opacity": 0,
+              "scale": 1
+           },
+           "to_animation": {
+              "opacity": 1,
+              "scale": 1
+           }
+        },
+        {
+           "type_animation": "to",
+           "duration": 1,
+           "time": 168,
+           "to_animation": {
+              "opacity": 0,
+              "scale": 1
+           }
+        }
+     ]
+  },
+  {
+     "frameName": "imgMemoriasSignificativas",
+     "type": "image",
+     "content": "../assets/imgs/img_conectar_animal.png",
+     "moving": true,
+     "style": {
+        "width": "350px",
+        "max-width": "80vw"
+     },
+     "efects": [
+        {
+           "type_animation": "fromTo",
+           "position_from": "center",
+           "position_to": "",
+           "duration": 1,
+           "time": 169,
+           "from_animation": {
+              "opacity": 0,
+              "scale": 1
+           },
+           "to_animation": {
+              "opacity": 1,
+              "scale": 1
+           }
+        },
+        {
+           "type_animation": "to",
+           "duration": 1,
+           "time": 180,
+           "to_animation": {
+              "opacity": 0,
+              "scale": 1
+           }
+        }
+     ]
+  },
+  {
+     "frameName": "imgMapa",
+     "type": "image",
+     "content": "../assets/imgs/golfinho.png",
+     "moving": true,
+     "style": {
+        "width": "350px",
+        "max-width": "80vw"
+     },
+     "efects": [
+        {
+           "type_animation": "fromTo",
+           "position_from": "center",
+           "position_to": "",
+           "duration": 1,
+           "time": 181,
+           "from_animation": {
+              "opacity": 0,
+              "scale": 1
+           },
+           "to_animation": {
+              "opacity": 1,
+              "scale": 1
+           }
+        },
+        {
+           "type_animation": "to",
+           "duration": 1,
+           "time": 285,
+           "to_animation": {
+              "opacity": 0,
+              "scale": 1
+           }
+        }
+     ]
+  },  
+   {
+       "frameName": "imgAndarEmCirculos",
+       "type": "image",
+       "content": "../assets/imgs/img_conexao_animal_poder.png",
+       "moving": true,
+       "style": {
+          "width": "350px",
+          "max-width": "80vw"
+       },
+       "efects": [
+          {
+             "type_animation": "fromTo",
+             "position_from": "center",
+             "position_to": "",
+             "duration": 1,
+             "time": 286,
+             "from_animation": {
+                "opacity": 0,
+                "scale": 1
+             },
+             "to_animation": {
+                "opacity": 1,
+                "scale": 1
+             }
+          },
+          {
+             "type_animation": "to",
+             "duration": 1,
+             "time": 295,
+             "to_animation": {
+                "opacity": 0,
+                "scale": 1
+             }
+          }
+       ]
+    },
+     {
+       "frameName": "imgLicoesVidasPassadas",
+       "type": "image",
+       "content": "../assets/imgs/img_explorando_energias_xamanicas.png",
+       "moving": true,
+       "style": {
+          "width": "350px",
+          "max-width": "80vw"
+       },
+       "efects": [
+          {
+             "type_animation": "fromTo",
+             "position_from": "center",
+             "position_to": "",
+             "duration": 1,
+             "time": 296,
+             "from_animation": {
+                "opacity": 0,
+                "scale": 1
+             },
+             "to_animation": {
+                "opacity": 1,
+                "scale": 1
+             }
+          },
+          {
+             "type_animation": "to",
+             "duration": 1,
+             "time": 327,
+             "to_animation": {
+                "opacity": 0,
+                "scale": 1
+             }
+          }
+       ]
+    },
+     {
+       "frameName": "imgDividaKarmica",
+       "type": "image",
+       "content": "../assets/imgs/img_convite_xamanico.png",
+       "moving": true,
+       "style": {
+          "width": "350px",
+          "max-width": "80vw"
+       },
+       "efects": [
+          {
+             "type_animation": "fromTo",
+             "position_from": "center",
+             "position_to": "",
+             "duration": 1,
+             "time": 328,
+             "from_animation": {
+                "opacity": 0,
+                "scale": 1
+             },
+             "to_animation": {
+                "opacity": 1,
+                "scale": 1
+             }
+          },
+          {
+             "type_animation": "to",
+             "duration": 1,
+             "time": 387,
+             "to_animation": {
+                "opacity": 0,
+                "scale": 1
+             }
+          }
+       ]
+    },
+     {
+       "frameName": "form2",
+       "type": "form",
+       "content": "[form2]",
+       "time": 389
+    }
+]
