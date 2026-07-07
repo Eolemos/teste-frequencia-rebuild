@@ -128,8 +128,7 @@
     function revealPitchStep() {
       var app = getApp();
       if (app) {
-        app.parte3 = false;
-        app.showPlayer = false;
+        app.parte3 = true;
         app.parte4 = true;
         if (typeof app.$nextTick === "function") {
           app.$nextTick(function () {
