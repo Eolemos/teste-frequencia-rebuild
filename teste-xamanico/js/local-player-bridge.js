@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   var BASE = "/teste-xamanico";
   var playerToMp4 = {
     "6a3d6c5b6e2c9c5a59169ab0": "diagnostico_destino_1.mp4",
@@ -21,6 +21,7 @@
   };
   var finalPlayerId = "6a2b239e8950ec706cbf71a9";
   var finalCtaTime = 1267;
+  var p2SafeRevealTime = 1267;
   var watchdogCheckoutUrl = "https://pay.cakto.com.br/ecs6z2x";
   var p2Players = {
     "6a3d6ec0b46ed3da55697a72": true,
@@ -32,13 +33,13 @@
     "6a3d74a7cbea5b52000eefbd": true
   };
   var p2RevealTimes = {
-    "6a3d6ec0b46ed3da55697a72": 2281,
-    "6a3d6f0eab74e8fd0f26b316": 2283,
-    "6a3d755f939c8f300cf46d33": 2274,
-    "6a3d7456cbea5b52000eef26": 2309,
-    "6a3d6f579f8674db4f7a52f1": 2307,
-    "6a3d733a02a941bb305752f1": 2278,
-    "6a3d74a7cbea5b52000eefbd": 2283
+    "6a3d6ec0b46ed3da55697a72": 1267,
+    "6a3d6f0eab74e8fd0f26b316": 1267,
+    "6a3d755f939c8f300cf46d33": 1267,
+    "6a3d7456cbea5b52000eef26": 1267,
+    "6a3d6f579f8674db4f7a52f1": 1267,
+    "6a3d733a02a941bb305752f1": 1267,
+    "6a3d74a7cbea5b52000eefbd": 1267
   };
 
   function addStyles() {
@@ -83,6 +84,7 @@
     var pitchTime = Number(options.pitchTime || 0);
     var stage = options.stage || inferStage(playerId, container);
     var p2RevealTime = Number(options.p2RevealTime || p2RevealTimes[playerId] || 0);
+    if (stage === "p2" && (!p2RevealTime || p2RevealTime > p2SafeRevealTime)) p2RevealTime = p2SafeRevealTime;
     var finalCtaId = stage === "final" ? ' id="xamanico-final-cta"' : "";
 
     container.innerHTML = [
@@ -267,6 +269,26 @@
     }) || document.querySelector("video");
   }
 
+
+  function getVideoSourceSafe(video) {
+    if (!video) return "";
+    var src = String(video.currentSrc || video.src || video.getAttribute("src") || "").toLowerCase();
+    if (!src) {
+      var sourceEl = video.querySelector && video.querySelector("source[src]");
+      if (sourceEl) src = String(sourceEl.getAttribute("src") || "").toLowerCase();
+    }
+    if (!src) {
+      var id = String(video.id || "").toLowerCase();
+      Object.keys(playerToMp4).some(function (playerId) {
+        if (id.indexOf(playerId.toLowerCase()) !== -1) {
+          src = playerToMp4[playerId].toLowerCase();
+          return true;
+        }
+        return false;
+      });
+    }
+    return src;
+  }
   function applyWatchdogButtonStyle(element) {
     element.style.display = "block";
     element.style.width = "calc(100% - 32px)";
@@ -375,6 +397,14 @@
     }
     applyWatchdogButtonStyle(cta);
     insertWatchdogBelowVideo(video, cta);
+
+    if (cta.scrollIntoView && !cta.dataset.watchdogScrolled) {
+      cta.dataset.watchdogScrolled = "1";
+      window.setTimeout(function () {
+        try { cta.scrollIntoView({ block: "nearest" }); } catch (e) {}
+      }, 50);
+    }
+
     if (inserted || !cta.dataset.watchdogLogged) {
       cta.dataset.watchdogLogged = "1";
       console.log("[XAM WATCHDOG] CTA final inserido", video.currentTime, video.currentSrc);
@@ -394,6 +424,18 @@
     }
     applyWatchdogButtonStyle(button);
     insertWatchdogBelowVideo(video, button);
+
+    var wrapper = video.closest && video.closest(".xamanico-local-player");
+    var nativeNext = wrapper ? wrapper.querySelector(".xamanico-local-player__next") : null;
+    if (nativeNext) nativeNext.classList.add("is-visible");
+
+    if (button.scrollIntoView && !button.dataset.watchdogScrolled) {
+      button.dataset.watchdogScrolled = "1";
+      window.setTimeout(function () {
+        try { button.scrollIntoView({ block: "nearest" }); } catch (e) {}
+      }, 50);
+    }
+
     if (inserted || !button.dataset.watchdogLogged) {
       button.dataset.watchdogLogged = "1";
       console.log("[XAM WATCHDOG] Botão P2 inserido", video.currentTime, video.currentSrc);
@@ -404,7 +446,7 @@
     var video = getVisibleWatchdogVideo();
     if (!video) return;
 
-    var source = String(video.currentSrc || video.src || "").toLowerCase();
+    var source = getVideoSourceSafe(video);
     if (!source) return;
 
     if (source.indexOf("final_pitch.mp4") !== -1 && video.currentTime >= finalCtaTime) {
@@ -414,6 +456,7 @@
 
     Object.keys(p2RevealTimesByMp4).some(function (mp4) {
       var revealTime = Number(p2RevealTimesByMp4[mp4] || 0);
+      if (!revealTime || revealTime > p2SafeRevealTime) revealTime = p2SafeRevealTime;
       if (source.indexOf(mp4) !== -1 && revealTime > 0 && video.currentTime >= revealTime) {
         ensureP2WatchdogButton(video);
         return true;
@@ -447,4 +490,17 @@
   window.__xamanicoMountLocalPlayer = mountLocalPlayer;
   window.__xamanicoPlayerToMp4 = playerToMp4;
   window.__xamanicoP2RevealTimes = p2RevealTimes;
+
+  window.__xamanicoForceButtons = function () {
+    var video = getVisibleWatchdogVideo();
+    if (!video) return false;
+    var source = getVideoSourceSafe(video);
+    if (source.indexOf("final_pitch.mp4") !== -1) {
+      ensureFinalWatchdogCta(video);
+      return true;
+    }
+    ensureP2WatchdogButton(video);
+    return true;
+  };
 })();
+
