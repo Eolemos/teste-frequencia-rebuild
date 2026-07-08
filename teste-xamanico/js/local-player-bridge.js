@@ -54,7 +54,7 @@
       ".xamanico-local-player__tap-box{padding:24px;border:2px solid #fff;border-radius:9px;background:rgba(27,128,28,.9);color:#fff;text-align:center;font:700 22px/1.2 Arial,sans-serif;cursor:pointer}",
       ".xamanico-local-player__tap-box span{display:block;margin-top:12px}",
       ".xamanico-local-player__next{display:none;justify-content:center;margin-top:16px;padding:0 10px}",
-      ".xamanico-local-player__next.is-visible{display:flex}",
+      ".xamanico-local-player__next.is-visible{display:none !important}",
       ".xamanico-local-player__next button{display:inline-flex;align-items:center;justify-content:center;min-height:56px;width:100%;max-width:410px;padding:14px 22px;border:0;border-radius:999px;background:#13ed3c;color:#fff;text-align:center;font:700 18px/1.15 Arial,sans-serif;box-shadow:0 4px 18px rgba(19,237,60,.35);cursor:pointer}",
       ".xamanico-local-player__cta{display:none;justify-content:center;margin-top:16px}",
       ".xamanico-local-player__cta.is-visible{display:flex}",
@@ -136,7 +136,7 @@
     }
 
     function revealPitchStep() {
-      if (nextStep) nextStep.classList.add("is-visible");
+      if (nextStep) { nextStep.classList.remove("is-visible"); nextStep.style.display = "none"; }
       var app = getApp();
       if (app) {
         app.parte3 = true;
@@ -338,6 +338,71 @@
     video.insertAdjacentElement("afterend", element);
   }
 
+  function hideCustomP2Buttons() {
+    var localNext = document.querySelectorAll(".xamanico-local-player__next");
+    Array.prototype.forEach.call(localNext, function (el) {
+      el.style.display = "none";
+      el.classList.remove("is-visible");
+    });
+
+    var fallback = document.getElementById("xamanico-p2-button-fallback");
+    if (fallback && fallback.parentNode) {
+      fallback.parentNode.removeChild(fallback);
+    }
+
+    var customButtons = Array.prototype.slice.call(document.querySelectorAll("button, a")).filter(function (el) {
+      if (!el || !el.textContent) return false;
+      var text = el.textContent.trim();
+      if (text.indexOf("Quero ver minhas energias ancestrais") === -1) return false;
+      if (el.classList && el.classList.contains("button-form")) return false;
+      return el.id === "xamanico-p2-button-fallback" || (el.closest && el.closest(".xamanico-local-player__next"));
+    });
+
+    customButtons.forEach(function (el) {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    });
+  }
+
+  function getOriginalP2Button() {
+    var candidates = Array.prototype.slice.call(
+      document.querySelectorAll(".button-form, .button-form.pulsating-button, button, a")
+    );
+
+    return candidates.find(function (el) {
+      if (!el || !el.textContent) return false;
+      var text = el.textContent.trim();
+      if (text.indexOf("Quero ver minhas energias ancestrais") === -1) return false;
+      if (el.id === "xamanico-p2-button-fallback") return false;
+      if (el.closest && el.closest(".xamanico-local-player__next")) return false;
+      return true;
+    }) || null;
+  }
+
+  function showOriginalP2ButtonNearVideo(video) {
+    hideCustomP2Buttons();
+
+    var button = getOriginalP2Button();
+    if (!button) return false;
+
+    button.hidden = false;
+    button.style.display = "block";
+    button.style.visibility = "visible";
+    button.style.opacity = "1";
+    button.style.position = "relative";
+    button.style.zIndex = "9999";
+    button.style.margin = "10px auto 0";
+    button.style.maxWidth = "360px";
+
+    insertWatchdogBelowVideo(video, button);
+
+    if (!button.dataset.xamanicoMovedNearVideo) {
+      button.dataset.xamanicoMovedNearVideo = "1";
+      console.log("[XAM] Botão original do P2 reposicionado abaixo do vídeo");
+    }
+
+    return true;
+  }
+
   function clickOriginalP2Advance() {
     var app = window.__xamanicoApp || null;
     if (app && typeof app.showPitch === "function") {
@@ -412,34 +477,8 @@
   }
 
   function ensureP2WatchdogButton(video) {
-    var button = document.getElementById("xamanico-p2-button-fallback");
-    var inserted = false;
-    if (!button) {
-      button = document.createElement("button");
-      button.id = "xamanico-p2-button-fallback";
-      button.type = "button";
-      button.textContent = "Quero ver minhas energias ancestrais";
-      button.addEventListener("click", clickOriginalP2Advance);
-      inserted = true;
-    }
-    applyWatchdogButtonStyle(button);
-    insertWatchdogBelowVideo(video, button);
-
-    var wrapper = video.closest && video.closest(".xamanico-local-player");
-    var nativeNext = wrapper ? wrapper.querySelector(".xamanico-local-player__next") : null;
-    if (nativeNext) nativeNext.classList.add("is-visible");
-
-    if (button.scrollIntoView && !button.dataset.watchdogScrolled) {
-      button.dataset.watchdogScrolled = "1";
-      window.setTimeout(function () {
-        try { button.scrollIntoView({ block: "nearest" }); } catch (e) {}
-      }, 50);
-    }
-
-    if (inserted || !button.dataset.watchdogLogged) {
-      button.dataset.watchdogLogged = "1";
-      console.log("[XAM WATCHDOG] Botão P2 inserido", video.currentTime, video.currentSrc);
-    }
+    hideCustomP2Buttons();
+    showOriginalP2ButtonNearVideo(video);
   }
 
   function runXamanicoWatchdog() {
@@ -503,4 +542,5 @@
     return true;
   };
 })();
+
 
