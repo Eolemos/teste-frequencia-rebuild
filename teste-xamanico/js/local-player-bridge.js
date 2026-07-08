@@ -61,6 +61,19 @@
       ".xamanico-local-player__cta a{display:inline-flex;align-items:center;justify-content:center;min-height:54px;width:100%;max-width:410px;padding:14px 24px;border-radius:999px;background:#13ed3c;color:#fff;text-align:center;text-decoration:none;font:700 20px/1.15 Arial,sans-serif;box-shadow:0 4px 18px rgba(19,237,60,.35)}"
     ].join("");
     document.head.appendChild(style);
+    var forceButtonColor = document.getElementById("xamanico-force-p2-button-color");
+    if (!forceButtonColor) {
+      forceButtonColor = document.createElement("style");
+      forceButtonColor.id = "xamanico-force-p2-button-color";
+      forceButtonColor.textContent = [
+        ".button-form.pulsating-button{color:#fff !important;}",
+        ".button-form.pulsating-button *{color:#fff !important;}",
+        "button.button-form.pulsating-button{color:#fff !important;}",
+        "#xamanico-p2-button-fallback{color:#fff !important;}",
+        "#xamanico-p2-button-fallback *{color:#fff !important;}"
+      ].join("");
+      document.head.appendChild(forceButtonColor);
+    }
   }
 
   function mountLocalPlayer(container, playerId, options) {
@@ -394,6 +407,17 @@
     button.style.maxWidth = "360px";
     button.style.color = "#fff";
     button.style.setProperty("color", "#fff", "important");
+    button.style.webkitTextFillColor = "#fff";
+    button.style.setProperty("-webkit-text-fill-color", "#fff", "important");
+
+    Array.prototype.forEach.call(button.querySelectorAll("*"), function (child) {
+      child.style.color = "#fff";
+      child.style.setProperty("color", "#fff", "important");
+      child.style.webkitTextFillColor = "#fff";
+      child.style.setProperty("-webkit-text-fill-color", "#fff", "important");
+    });
+    button.style.color = "#fff";
+    button.style.setProperty("color", "#fff", "important");
     Array.prototype.forEach.call(button.querySelectorAll("*"), function (child) {
       child.style.color = "#fff";
       child.style.setProperty("color", "#fff", "important");
@@ -548,6 +572,7 @@
     return true;
   };
 })();
+
 
 
 
