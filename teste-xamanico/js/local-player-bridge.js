@@ -21,6 +21,7 @@
   };
   var finalPlayerId = "6a2b239e8950ec706cbf71a9";
   var finalCtaTime = 1267;
+  var watchdogCheckoutUrl = "https://pay.cakto.com.br/ecs6z2x";
   var p2Players = {
     "6a3d6ec0b46ed3da55697a72": true,
     "6a3d6f0eab74e8fd0f26b316": true,
@@ -249,6 +250,184 @@
     });
   }
 
+  var p2RevealTimesByMp4 = {
+    "diagnostico_dinheiro.mp4": p2RevealTimes["6a3d6ec0b46ed3da55697a72"],
+    "diagnostico_felicidade.mp4": p2RevealTimes["6a3d6f0eab74e8fd0f26b316"],
+    "diagnostico_saude.mp4": p2RevealTimes["6a3d755f939c8f300cf46d33"],
+    "diagnostico_mulher_casada.mp4": p2RevealTimes["6a3d7456cbea5b52000eef26"],
+    "diagnostico_homem_casado.mp4": p2RevealTimes["6a3d6f579f8674db4f7a52f1"],
+    "diagnostico_homem_solteiro.mp4": p2RevealTimes["6a3d733a02a941bb305752f1"],
+    "diagnostico_mulher_solteira.mp4": p2RevealTimes["6a3d74a7cbea5b52000eefbd"]
+  };
+
+  function getVisibleWatchdogVideo() {
+    var videos = Array.prototype.slice.call(document.querySelectorAll("video"));
+    return videos.find(function (video) {
+      return video.offsetParent !== null;
+    }) || document.querySelector("video");
+  }
+
+  function applyWatchdogButtonStyle(element) {
+    element.style.display = "block";
+    element.style.width = "calc(100% - 32px)";
+    element.style.maxWidth = "520px";
+    element.style.margin = "18px auto";
+    element.style.padding = "16px 18px";
+    element.style.borderRadius = "14px";
+    element.style.textAlign = "center";
+    element.style.fontWeight = "800";
+    element.style.position = "relative";
+    element.style.zIndex = "9999";
+    element.style.boxSizing = "border-box";
+    element.style.background = "#13ed3c";
+    element.style.color = "#fff";
+    element.style.border = "0";
+    element.style.textDecoration = "none";
+    element.style.fontFamily = "Arial,sans-serif";
+    element.style.fontSize = "18px";
+    element.style.lineHeight = "1.2";
+    element.style.cursor = "pointer";
+  }
+
+  function lockWatchdogCheckoutHref(anchor) {
+    if (!anchor) return;
+    if (anchor.getAttribute("href") !== watchdogCheckoutUrl) {
+      anchor.setAttribute("href", watchdogCheckoutUrl);
+    }
+    if (anchor.href !== watchdogCheckoutUrl) {
+      anchor.href = watchdogCheckoutUrl;
+    }
+    if (anchor.dataset.watchdogHrefLocked) return;
+    anchor.dataset.watchdogHrefLocked = "1";
+    new MutationObserver(function () {
+      if (anchor.getAttribute("href") !== watchdogCheckoutUrl) {
+        anchor.setAttribute("href", watchdogCheckoutUrl);
+      }
+    }).observe(anchor, { attributes: true, attributeFilter: ["href"] });
+  }
+
+  function insertWatchdogBelowVideo(video, element) {
+    if (!video || !element) return;
+    var target = video.parentElement || video;
+    if (target.parentNode) {
+      target.parentNode.insertBefore(element, target.nextSibling);
+      return;
+    }
+    video.insertAdjacentElement("afterend", element);
+  }
+
+  function clickOriginalP2Advance() {
+    var app = window.__xamanicoApp || null;
+    if (app && typeof app.showPitch === "function") {
+      app.showPitch();
+      return true;
+    }
+
+    var buttons = Array.prototype.slice.call(document.querySelectorAll("button, a"));
+    var original = buttons.find(function (button) {
+      return button.id !== "xamanico-p2-button-fallback" &&
+        button.textContent &&
+        button.textContent.indexOf("Quero ver minhas energias ancestrais") !== -1;
+    });
+
+    if (original) {
+      original.click();
+      return true;
+    }
+
+    if (app) {
+      app.parte5 = true;
+      app.parte4 = false;
+      app.parte3 = false;
+      app.showPlayer = false;
+      if (typeof app.$nextTick === "function") app.$nextTick(function () {});
+      return true;
+    }
+
+    if (window.CustomEvent) {
+      window.dispatchEvent(new CustomEvent("xamanico:p2-fallback-next"));
+    }
+    return false;
+  }
+
+  function ensureFinalWatchdogCta(video) {
+    var cta = document.getElementById("xamanico-final-cta");
+    var inserted = false;
+    if (!cta) {
+      cta = document.createElement("a");
+      cta.id = "xamanico-final-cta";
+      cta.textContent = "Quero garantir minha leitura agora";
+      inserted = true;
+    }
+    if (cta.tagName && cta.tagName.toLowerCase() === "a") {
+      lockWatchdogCheckoutHref(cta);
+    } else {
+      var link = cta.querySelector("a");
+      if (!link) {
+        cta.textContent = "";
+        link = document.createElement("a");
+        cta.appendChild(link);
+      }
+      lockWatchdogCheckoutHref(link);
+      link.textContent = "Quero garantir minha leitura agora";
+      link.style.color = "inherit";
+      link.style.textDecoration = "none";
+    }
+    applyWatchdogButtonStyle(cta);
+    insertWatchdogBelowVideo(video, cta);
+    if (inserted || !cta.dataset.watchdogLogged) {
+      cta.dataset.watchdogLogged = "1";
+      console.log("[XAM WATCHDOG] CTA final inserido", video.currentTime, video.currentSrc);
+    }
+  }
+
+  function ensureP2WatchdogButton(video) {
+    var button = document.getElementById("xamanico-p2-button-fallback");
+    var inserted = false;
+    if (!button) {
+      button = document.createElement("button");
+      button.id = "xamanico-p2-button-fallback";
+      button.type = "button";
+      button.textContent = "Quero ver minhas energias ancestrais";
+      button.addEventListener("click", clickOriginalP2Advance);
+      inserted = true;
+    }
+    applyWatchdogButtonStyle(button);
+    insertWatchdogBelowVideo(video, button);
+    if (inserted || !button.dataset.watchdogLogged) {
+      button.dataset.watchdogLogged = "1";
+      console.log("[XAM WATCHDOG] Botão P2 inserido", video.currentTime, video.currentSrc);
+    }
+  }
+
+  function runXamanicoWatchdog() {
+    var video = getVisibleWatchdogVideo();
+    if (!video) return;
+
+    var source = String(video.currentSrc || video.src || "").toLowerCase();
+    if (!source) return;
+
+    if (source.indexOf("final_pitch.mp4") !== -1 && video.currentTime >= finalCtaTime) {
+      ensureFinalWatchdogCta(video);
+      return;
+    }
+
+    Object.keys(p2RevealTimesByMp4).some(function (mp4) {
+      var revealTime = Number(p2RevealTimesByMp4[mp4] || 0);
+      if (source.indexOf(mp4) !== -1 && revealTime > 0 && video.currentTime >= revealTime) {
+        ensureP2WatchdogButton(video);
+        return true;
+      }
+      return false;
+    });
+  }
+
+  function startXamanicoWatchdog() {
+    if (window.__xamanicoWatchdogStarted) return;
+    window.__xamanicoWatchdogStarted = true;
+    window.setInterval(runXamanicoWatchdog, 500);
+  }
+
   function startAutoMount() {
     scanAndMountLocalPlayers();
     if (window.MutationObserver) {
@@ -256,6 +435,7 @@
       observer.observe(document.documentElement, { childList: true, subtree: true });
     }
     window.setInterval(scanAndMountLocalPlayers, 1000);
+    startXamanicoWatchdog();
   }
 
   if (document.readyState === "loading") {
