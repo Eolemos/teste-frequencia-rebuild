@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bonus secreto</title>
+  <title>&Aacute;rea de acesso</title>
   <link rel="stylesheet" href="css/member-area.css" />
   <link rel="stylesheet" href="assets/css/quiz-premium-mobile.css?v=20260705195953">
 </head>
 <body>
   <main>
-    <h1>Bonus secreto</h1>
-    <p class="center">Este conteudo libera depois da conclusao dos 7 dias.</p>
+    <h1>&Aacute;rea de acesso</h1>
+    <p class="center">Verificando seu acesso...</p>
 
     <div id="content"></div>
   </main>
@@ -30,17 +30,23 @@
 
       try {
         const data = await MemberApi.bonus(token);
+        const brand = MemberApi.getBrand(data);
+        document.title = brand.bonusName;
+        document.querySelector("h1").textContent = brand.bonusName;
+        document.querySelector(".center").textContent = brand.isXamanico
+          ? "Este bônus xamânico libera depois da conclusão dos 7 dias."
+          : "Este conteudo libera depois da conclusao dos 7 dias.";
 
         if (data.locked) {
           content.innerHTML = `
             <div class="panel center">
               <span class="badge">Bloqueado por enquanto</span>
-              <p>${data.message || "Conclua os 7 dias para liberar."}</p>
+              <p>${data.message || `Conclua os 7 dias para liberar ${brand.bonusName}.`}</p>
               <p class="muted">${(data.completedDays || []).length}/7 dias concluidos.</p>
             </div>
             <div class="actions">
-              <a class="button" href="${MemberApi.pageUrl("frequencia", token)}">Continuar jornada</a>
-              <a class="button secondary" href="${MemberApi.pageUrl("progresso", token)}">Ver progresso</a>
+              <a class="button" href="${MemberApi.pageUrl("frequencia", token)}">Continuar ${brand.isXamanico ? "jornada xamânica" : "jornada"}</a>
+              <a class="button secondary" href="${MemberApi.pageUrl("progresso", token)}">${brand.progressName}</a>
               ${MemberApi.backToPanelHtml(token)}
             </div>
           `;
@@ -50,8 +56,8 @@
         content.innerHTML = `
           <div class="panel center">
             <span class="badge">Liberado</span>
-            <h2>${data.title || "Bonus secreto liberado"}</h2>
-            <p>${data.message || "Voce concluiu os 7 dias e desbloqueou este acesso extra."}</p>
+            <h2>${data.title || `${brand.bonusName} liberado`}</h2>
+            <p>${data.message || `Voce concluiu os 7 dias e desbloqueou ${brand.bonusName}.`}</p>
             ${data.unlockedAt ? `<p class="muted">Liberado em ${MemberApi.formatDate(data.unlockedAt)}</p>` : ""}
           </div>
           <div class="actions">

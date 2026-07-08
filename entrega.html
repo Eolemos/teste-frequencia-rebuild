@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Materiais prontos</title>
+  <title>&Aacute;rea de acesso</title>
   <link rel="stylesheet" href="css/member-area.css" />
   <link rel="stylesheet" href="assets/css/quiz-premium-mobile.css?v=20260705195953">
 </head>
 <body>
   <main>
-    <h1>Seus materiais est&atilde;o prontos</h1>
-    <p class="center">Baixe seus PDFs personalizados e acesse sua jornada de frequencia.</p>
+    <h1>&Aacute;rea de acesso</h1>
+    <p class="center">Buscando seus materiais...</p>
 
     <div id="content"></div>
   </main>
@@ -275,16 +275,23 @@
     }
 
     function materialLinks(data) {
+      const brand = MemberApi.getBrand(data);
+      document.title = brand.materialsName;
+      document.querySelector("h1").textContent = brand.materialsName;
+      document.querySelector(".center").textContent = brand.isXamanico
+        ? "Baixe seus materiais xamânicos personalizados e acesse seu Portal Xamânico."
+        : "Baixe seus PDFs personalizados e acesse sua jornada de frequencia.";
+
       const materials = collectMaterials(data);
       const usedUrls = new Set();
 
       const expectedBooks = [
         {
-          label: "Mapa Completo de Frequências Vibracionais",
+          label: brand.isXamanico ? "Mapa Xamânico Personalizado" : "Mapa Completo de Frequências Vibracionais",
           terms: ["mapa", "frequencias", "vibracionais"]
         },
         {
-          label: "Guia Vibracional do Nome",
+          label: brand.mainMaterialName,
           terms: ["guia", "leitura", "nome"]
         },
         {
@@ -308,19 +315,19 @@
       }).join("");
 
       const bonusItem = materials.find((item) => item.isBonus && !usedUrls.has(item.url));
-      const bonusHtml = bonusItem ? renderDownloadButton(bonusItem, "Depois dos 7 Dias") : "";
+      const bonusHtml = bonusItem ? renderDownloadButton(bonusItem, brand.afterSevenDaysName) : "";
 
       return `
         <div class="panel center">
           <span class="badge">Entrega liberada</span>
           <p>Oi, <strong>${data.name || "Gabriel"}</strong>.</p>
-          <p class="muted">Seus materiais foram preparados com sucesso.</p>
+          <p class="muted">${brand.materialsName} preparados com sucesso.</p>
         </div>
 
         <div class="actions">
           ${buttons}
           ${bonusHtml}
-          <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar plataforma bônus vitalícia</a>
+          <a class="button secondary" href="${MemberApi.pageUrl("membros", token)}">Acessar ${brand.memberAreaName}</a>
           ${MemberApi.backToPanelHtml(token)}
         </div>
       `;

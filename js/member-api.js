@@ -129,6 +129,60 @@
     return `${minutes}min ${String(rest).padStart(2, "0")}s`;
   }
 
+  function getBrand(data) {
+    const brand = data && data.brand ? data.brand : {};
+    const productId = brand.productId || (data && data.productId) || "leitura_frequencia";
+    const isXamanico =
+      Boolean(brand.isXamanico) ||
+      productId === "teste_xamanico";
+
+    const defaults = isXamanico
+      ? {
+          productId: "teste_xamanico",
+          isXamanico: true,
+          productName: "Teste Xamânico",
+          mainMaterialName: "Guia Xamânico Personalizado",
+          memberAreaName: "Portal Xamânico",
+          materialsName: "Materiais Xamânicos",
+          diagnosticName: "Diagnóstico Xamânico Bônus",
+          frequencyName: "Prática Xamânica Guiada",
+          progressName: "Jornada Xamânica de 7 Dias",
+          bonusName: "Bônus Xamânico Secreto",
+          afterSevenDaysName: "Bônus Xamânico dos 7 Dias",
+          signatureName: "Teste Xamânico"
+        }
+      : {
+          productId: "leitura_frequencia",
+          isXamanico: false,
+          productName: "Guia Vibracional do Nome",
+          mainMaterialName: "Guia Vibracional do Nome",
+          memberAreaName: "Área de membros",
+          materialsName: "Materiais principais",
+          diagnosticName: "Diagnóstico bônus",
+          frequencyName: "Frequência guiada",
+          progressName: "Progresso de 7 dias",
+          bonusName: "Bônus secreto",
+          afterSevenDaysName: "Depois dos 7 Dias",
+          signatureName: "Guia Vibracional do Nome"
+        };
+
+    return {
+      ...defaults,
+      ...brand,
+      productId: defaults.productId,
+      isXamanico: defaults.isXamanico
+    };
+  }
+
+  function isXamanico(data) {
+    return getBrand(data).isXamanico;
+  }
+
+  function brandText(data, key) {
+    const brand = getBrand(data);
+    return brand[key] || getBrand({})[key] || "";
+  }
+
   window.MemberApi = {
     API_BASE,
     getToken,
@@ -140,6 +194,9 @@
     showTokenLogin,
     formatDate,
     secondsLabel,
+    getBrand,
+    isXamanico,
+    brandText,
     access: (token) => request(`/api/access/${encodeURIComponent(token)}`),
     submitAccess: (token, payload) => post(`/api/access/${encodeURIComponent(token)}/submit`, payload),
     generateDelivery: (token) => post(`/api/access/${encodeURIComponent(token)}/generate`, {}),

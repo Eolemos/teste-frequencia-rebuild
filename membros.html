@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>&Aacute;rea de membros</title>
+  <title>&Aacute;rea de acesso</title>
   <link rel="stylesheet" href="css/member-area.css" />
   <link rel="stylesheet" href="assets/css/quiz-premium-mobile.css?v=20260705195953">
 </head>
 <body>
   <main>
-    <h1>&Aacute;rea de membros</h1>
-    <p class="center">Use o token enviado por e-mail para acessar seus materiais e sua jornada.</p>
+    <h1>&Aacute;rea de acesso</h1>
+    <p class="center">Carregando seu acesso...</p>
 
     <div id="content"></div>
   </main>
@@ -21,28 +21,35 @@
     const content = document.querySelector("#content");
 
     function dashboard(data) {
+      const brand = MemberApi.getBrand(data);
       const progress = data.progress || {};
       const completed = (progress.completedDays || []).length;
       const bonusUnlocked = Boolean(progress.bonusUnlocked);
       const diagnosticText = data.diagnostic?.completed
-        ? "Diagnostico respondido"
-        : "Responder diagnostico bonus";
+        ? `${brand.diagnosticName} respondido`
+        : brand.diagnosticName;
       const bonusText = bonusUnlocked
-        ? "Abrir bonus secreto"
-        : "Bonus secreto libera apos concluir 7 dias";
+        ? `Abrir ${brand.bonusName}`
+        : `${brand.bonusName} libera apos concluir 7 dias`;
+
+      document.title = brand.memberAreaName;
+      document.querySelector("h1").textContent = brand.memberAreaName;
+      document.querySelector(".center").textContent = brand.isXamanico
+        ? "Acesse seus materiais xamânicos, diagnóstico xamânico bônus e prática xamânica guiada."
+        : "Use o token enviado por e-mail para acessar seus materiais e sua jornada.";
 
       content.innerHTML = `
         <div class="panel center">
           <span class="badge">Acesso vitalicio</span>
           <p>Oi, <strong>${data.name || "Ana Clara"}</strong>.</p>
-          <p class="muted">${completed}/7 dias concluidos na jornada de frequencia.</p>
+          <p class="muted">${completed}/7 dias concluidos na ${brand.progressName.toLowerCase()}.</p>
         </div>
 
         <div class="actions">
-          <a class="button" href="${MemberApi.pageUrl("frequencia", data.token)}">Ouvir frequencia</a>
+          <a class="button" href="${MemberApi.pageUrl("entrega", data.token)}">Baixar ${brand.materialsName.toLowerCase()}</a>
+          <a class="button secondary" href="${MemberApi.pageUrl("frequencia", data.token)}">${brand.isXamanico ? "Ouvir prática xamânica" : "Ouvir frequência"}</a>
           <a class="button secondary" href="${MemberApi.pageUrl("diagnostico", data.token)}">${diagnosticText}</a>
-          <a class="button secondary" href="${MemberApi.pageUrl("progresso", data.token)}">Ver progresso</a>
-          <a class="button secondary" href="${MemberApi.pageUrl("entrega", data.token)}">Baixar materiais</a>
+          <a class="button secondary" href="${MemberApi.pageUrl("progresso", data.token)}">${brand.progressName}</a>
           <a class="button secondary" href="${MemberApi.pageUrl("bonus", data.token)}">${bonusText}</a>
         </div>
       `;
