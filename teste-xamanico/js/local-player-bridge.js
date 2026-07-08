@@ -392,6 +392,12 @@
     button.style.zIndex = "9999";
     button.style.margin = "10px auto 0";
     button.style.maxWidth = "360px";
+    button.style.color = "#fff";
+    button.style.setProperty("color", "#fff", "important");
+    Array.prototype.forEach.call(button.querySelectorAll("*"), function (child) {
+      child.style.color = "#fff";
+      child.style.setProperty("color", "#fff", "important");
+    });
 
     insertWatchdogBelowVideo(video, button);
 
@@ -542,5 +548,6 @@
     return true;
   };
 })();
+
 
 
